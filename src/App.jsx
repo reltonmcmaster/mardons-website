@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, CheckCircle2, Award, Shield, Users, ArrowRight, Star, Car } from 'lucide-react';
+import { Phone, Mail, MapPin, CheckCircle2, Award, Shield, Users, ArrowRight, Star, Car, Facebook, Instagram } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('code8');
-  // State to track if the user wants to add vehicle hire for test day
   const [includeVehicleHire, setIncludeVehicleHire] = useState(false);
 
   const contactInfo = {
@@ -50,13 +49,11 @@ export default function App() {
     }
   };
 
-  // Switch tabs cleanly and reset the vehicle hire checkbox automatically
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
     setIncludeVehicleHire(false);
   };
 
-  // Dynamic WhatsApp Link dispatch logic
   const generateWhatsAppLink = (category, hours, basePrice) => {
     let message = "";
     const activeCategory = pricing[category];
@@ -89,19 +86,24 @@ export default function App() {
 
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center w-full">
           <div className="flex items-center gap-3">
             <div className="text-xl font-black tracking-tighter text-white">
               MARDONS<span className="text-red-500">.</span>
             </div>
             <span className="text-xs uppercase tracking-widest text-slate-400 border-l border-slate-700 pl-3 hidden sm:inline">Driving Academy</span>
           </div>
-          <div className="flex items-center gap-6 text-sm font-medium text-slate-300">
-            <a href="#features" className="hover:text-red-500 transition-colors">Why MDA</a>
-            <a href="#packages" className="hover:text-red-500 transition-colors">Rates</a>
-            <a href="#testimonials" className="hover:text-red-500 transition-colors">Reviews</a>
-            <a href={`tel:${contactInfo.phone}`} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-semibold text-xs uppercase tracking-wider transition-all shadow-lg shadow-red-900/20">
-              Call Now
+          
+          {/* Action Hub: Social Icons + Action Call Button */}
+          <div className="flex items-center gap-5">
+            <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors" title="Facebook">
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-pink-500 transition-colors" title="Instagram">
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a href={`tel:${contactInfo.phone}`} className="bg-red-600 hover:bg-red-700 text-white p-2.5 rounded-full transition-all shadow-lg shadow-red-900/20 flex items-center justify-center" title="Call Hotline">
+              <Phone className="w-4 h-4 fill-current" />
             </a>
           </div>
         </div>
@@ -122,11 +124,11 @@ export default function App() {
             Professional, certified K53 driver training tailored for lasting confidence. We combine modern vehicles, highly disciplined training frameworks, and patient tuition to secure your licence smoothly.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="#packages" className="bg-slate-100 hover:bg-white text-slate-950 px-6 py-3 rounded-md font-bold transition-all flex items-center gap-2 shadow-lg">
+            <a href="#packages" className="bg-slate-100 hover:bg-white text-slate-950 px-6 py-3 rounded-md font-bold transition-all flex items-center gap-2 shadow-lg text-sm">
               View Rates & Packages <ArrowRight className="w-4 h-4 text-red-600" />
             </a>
-            <a href={`tel:${contactInfo.phone}`} className="bg-slate-900 hover:bg-slate-800 text-white border border-slate-700 px-6 py-3 rounded-md font-semibold transition-all">
-              Talk to an Instructor
+            <a href={`tel:${contactInfo.phone}`} className="bg-slate-900 hover:bg-slate-800 text-white border border-slate-700 px-6 py-3 rounded-md font-semibold transition-all text-sm flex items-center gap-2">
+              <Phone className="w-4 h-4 text-red-500" /> Talk to an Instructor
             </a>
           </div>
         </div>
@@ -172,7 +174,6 @@ export default function App() {
               All inclusive training bundles. No hidden infrastructure surcharges. Select your training category below.
             </p>
             
-            {/* Tab Swapper */}
             <div className="inline-flex p-1 bg-slate-900 rounded-lg mt-8 border border-slate-800">
               <button onClick={() => handleTabChange('code8')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'code8' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
                 Code 8
@@ -181,12 +182,11 @@ export default function App() {
                 Code 10
               </button>
               <button onClick={() => handleTabChange('learners')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'learners' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
-                Type Classes
+                Classes
               </button>
             </div>
           </div>
 
-          {/* Active Pricing Display */}
           <div>
             <div className="mb-6 text-center md:text-left md:flex justify-between items-end border-b border-slate-800 pb-6">
               <div>
@@ -198,7 +198,6 @@ export default function App() {
               </span>
             </div>
 
-            {/* Interactive Add-On Options Checkbox Component */}
             {activeTab !== 'learners' && (
               <div className="mb-8 flex justify-center md:justify-start">
                 <label className="flex items-center gap-3 bg-slate-900 border border-slate-800 hover:border-slate-700 transition-all px-4 py-3 rounded-lg cursor-pointer select-none group">
@@ -254,7 +253,6 @@ export default function App() {
               })}
             </div>
 
-            {/* Inclusions & Ancillary Rates */}
             <div className="mt-8 bg-slate-950 border border-slate-900 p-6 rounded-xl grid sm:grid-cols-2 md:grid-cols-3 gap-4">
               {pricing[activeTab].extras.map((extra, idx) => (
                 <div key={idx} className="flex items-center gap-3 text-slate-300 text-xs font-medium">
@@ -267,34 +265,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Customer Feedback */}
-      <section id="testimonials" className="max-w-6xl mx-auto py-24 px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-black tracking-tight text-white mb-3">Endorsed By Drivers in The Bay</h2>
-          <p className="text-slate-400 text-sm max-w-md mx-auto">
-            Real feedback from graduates who passed their licensing tests under our direction.
-          </p>
-        </div>
-        <div className="grid sm:grid-cols-2 gap-6">
-          {testimonials.map((t, idx) => (
-            <div key={idx} className="bg-slate-900/30 border border-slate-900 p-6 rounded-xl flex flex-col justify-between">
-              <div>
-                <div className="flex gap-1 text-amber-500 mb-4">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}
-                </div>
-                <p className="text-slate-300 text-sm italic leading-relaxed mb-6">
-                  "{t.text}"
-                </p>
-              </div>
-              <span className="text-xs font-bold text-white uppercase tracking-wider border-t border-slate-800/60 pt-4 block">
-                — {t.name}
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Contact & Footnote Architecture */}
+      {/* Footer Details */}
       <footer className="bg-slate-950 border-t border-slate-900 py-16 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-start">
           <div>
@@ -304,9 +275,13 @@ export default function App() {
             <p className="text-slate-400 text-xs leading-relaxed max-w-xs mb-6">
               Vetted, high-end K53 educational design operating throughout Gqeberha. Built on execution, modern fleets, and complete safety profiles.
             </p>
-            <div className="flex gap-4 text-xs font-semibold text-slate-400">
-              <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Facebook</a>
-              <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Instagram</a>
+            <div className="flex gap-4 items-center">
+              <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors">
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-pink-500 transition-colors">
+                <Instagram className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
@@ -333,8 +308,8 @@ export default function App() {
             <p className="text-slate-400 text-xs mb-4 leading-relaxed">
               Have specific scoping questions regarding testing slots or vehicle availability? Give our team a call directly.
             </p>
-            <a href={`tel:${contactInfo.phone}`} className="w-full text-center block bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider py-2.5 rounded transition-colors">
-              Initiate Call
+            <a href={`tel:${contactInfo.phone}`} className="w-full text-center block bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider py-2.5 rounded transition-colors flex items-center justify-center gap-2">
+              <Phone className="w-3.5 h-3.5 fill-current" /> Initiate Call
             </a>
           </div>
         </div>
