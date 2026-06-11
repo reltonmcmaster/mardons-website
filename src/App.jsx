@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, CheckCircle2, Award, Shield, Users, Clock, ArrowRight, Star } from 'lucide-react';
+import { Phone, Mail, MapPin, CheckCircle2, Award, Shield, Users, ArrowRight, Star, Car } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('code8');
+  // State to track if the user wants to add vehicle hire for test day
+  const [includeVehicleHire, setIncludeVehicleHire] = useState(false);
 
   const contactInfo = {
     phone: '076 029 5823',
+    whatsappNum: '27760295823',
     email: 'info@mardonsdrivingacademy.co.za',
     address: '1 Exmouth Street, Algoa Park, Gqeberha, 6001',
     facebook: 'https://www.facebook.com/mardonsdrivingacademy',
@@ -16,20 +19,24 @@ export default function App() {
     code8: {
       title: 'Code 8 Manual (Light Motor Vehicle)',
       subtitle: 'Taught in premium, brand-new VW Polos.',
+      hirePrice: 650,
+      hireLabel: 'Add Car Hire for Test Day (+R650)',
       packages: [
-        { hours: '10 Hours', price: 'R3 200', desc: 'Ideal for drivers with basic familiarity looking to polish K53 procedures.' },
-        { hours: '16 Hours', price: 'R5 200', desc: 'Recommended for beginners to master K53 parking and road logic.' },
-        { hours: '20 Hours', price: 'R6 200', desc: 'Complete zero-to-hero track for absolute beginners who have never sat behind a wheel.' }
+        { hours: '10 Hours', price: 3200, desc: 'Ideal for drivers with basic familiarity looking to polish K53 procedures.' },
+        { hours: '16 Hours', price: 5200, desc: 'Recommended for beginners to master K53 parking and road logic.' },
+        { hours: '20 Hours', price: 6200, desc: 'Complete zero-to-hero track for absolute beginners who have never sat behind a wheel.' }
       ],
       extras: ['FREE Learner\'s Materials & Theory Class included', 'Door-to-door pickup & drop-off service', 'Additional hours: R350 p/h']
     },
     code10: {
       title: 'Code 10 Manual (Heavy Motor Vehicle)',
       subtitle: 'Taught on industry-standard commercial trucks.',
+      hirePrice: 700,
+      hireLabel: 'Add Truck Hire for Test Day (+R700)',
       packages: [
-        { hours: '10 Hours', price: 'R3 700', desc: 'For those with basic truck handling handling looking to nail the test yard.' },
-        { hours: '16 Hours', price: 'R6 000', desc: 'Comprehensive yard and road training covering all K53 truck modules.' },
-        { hours: '20 Hours', price: 'R7 000', desc: 'Full premium mastery track designed for absolute beginners entering the logistics space.' }
+        { hours: '10 Hours', price: 3700, desc: 'For those with basic truck handling looking to nail the test yard.' },
+        { hours: '16 Hours', price: 6000, desc: 'Comprehensive yard and road training covering all K53 truck modules.' },
+        { hours: '20 Hours', price: 7000, desc: 'Full premium mastery track designed for absolute beginners entering the logistics space.' }
       ],
       extras: ['FREE Learner\'s Materials & Theory Class included', 'Certified commercial instructors', 'Additional hours: R400 p/h']
     },
@@ -37,18 +44,41 @@ export default function App() {
       title: 'Learner\'s License Tuition',
       subtitle: 'One-on-one professional theory instruction.',
       packages: [
-        { hours: '2-Hour Session', price: 'R400', desc: 'Personalized interactive breakdown covering the entire new electronic testing framework.' }
+        { hours: '2-Hour Session', price: 400, desc: 'Personalized interactive breakdown covering the entire new electronic testing framework.' }
       ],
       extras: ['All official premium learning materials provided', 'High pass rate preparation strategy', '1-on-1 private tuition structure']
     }
   };
 
-  const testimonials = [
-    { name: 'Mnumzana Makhathini', text: 'I got my driver\'s license today thanks to Mona. She made it incredibly straightforward to pass the test without stress.' },
-    { name: 'Chanté Jooste', text: 'Highly recommend MDA. Big thanks to Mona, Alfredo, and Siya for preparing me thoroughly for the road ahead. Best in the Bay.' },
-    { name: 'Janine Baartman', text: 'Excellent, patient service. They genuinely care about making sure you are safe, calm, and highly competent.' },
-    { name: 'Armand Erasmus', text: 'Extremely happy with the training. The instructors are professional, calm, and always willing to adjust to your pace.' }
-  ];
+  // Switch tabs cleanly and reset the vehicle hire checkbox automatically
+  const handleTabChange = (tabName) => {
+    setActiveTab(tabName);
+    setIncludeVehicleHire(false);
+  };
+
+  // Dynamic WhatsApp Link dispatch logic
+  const generateWhatsAppLink = (category, hours, basePrice) => {
+    let message = "";
+    const activeCategory = pricing[category];
+    const totalPrice = includeVehicleHire && category !== 'learners' ? basePrice + activeCategory.hirePrice : basePrice;
+    const formattedTotal = `R${totalPrice.toLocaleString('en-ZA')}`;
+    const formattedBase = `R${basePrice.toLocaleString('en-ZA')}`;
+
+    if (category === 'learners') {
+      message = `Hi Mardons Driving Academy, I would like to book the Learner's License Tuition package (${hours} for ${formattedBase}). Please let me know available slots.`;
+    } else {
+      const formattedCategory = category === 'code8' ? 'Code 8 Manual' : 'Code 10 Manual';
+      const vehicleType = category === 'code8' ? 'car hire' : 'truck hire';
+      
+      if (includeVehicleHire) {
+        message = `Hi Mardons Driving Academy, I want to book the ${formattedCategory} package for ${hours} and include the test day ${vehicleType}. Total comes to ${formattedTotal} (${formattedBase} + R${activeCategory.hirePrice} hire). Please let me know how we can get started.`;
+      } else {
+        message = `Hi Mardons Driving Academy, I am interested in booking the ${formattedCategory} package for ${hours} (${formattedBase}). Please let me know how we can get started.`;
+      }
+    }
+
+    return `https://wa.me/${contactInfo.whatsappNum}?text=${encodeURIComponent(message)}`;
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-red-600 selection:text-white">
@@ -144,21 +174,21 @@ export default function App() {
             
             {/* Tab Swapper */}
             <div className="inline-flex p-1 bg-slate-900 rounded-lg mt-8 border border-slate-800">
-              <button onClick={() => setActiveTab('code8')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'code8' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
+              <button onClick={() => handleTabChange('code8')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'code8' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
                 Code 8
               </button>
-              <button onClick={() => setActiveTab('code10')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'code10' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
+              <button onClick={() => handleTabChange('code10')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'code10' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
                 Code 10
               </button>
-              <button onClick={() => setActiveTab('learners')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'learners' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
-                Learner's Classes
+              <button onClick={() => handleTabChange('learners')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'learners' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
+                Type Classes
               </button>
             </div>
           </div>
 
           {/* Active Pricing Display */}
           <div>
-            <div className="mb-10 text-center md:text-left md:flex justify-between items-end border-b border-slate-800 pb-6">
+            <div className="mb-6 text-center md:text-left md:flex justify-between items-end border-b border-slate-800 pb-6">
               <div>
                 <h3 className="text-2xl font-black text-white">{pricing[activeTab].title}</h3>
                 <p className="text-slate-400 text-sm mt-1">{pricing[activeTab].subtitle}</p>
@@ -168,20 +198,60 @@ export default function App() {
               </span>
             </div>
 
+            {/* Interactive Add-On Options Checkbox Component */}
+            {activeTab !== 'learners' && (
+              <div className="mb-8 flex justify-center md:justify-start">
+                <label className="flex items-center gap-3 bg-slate-900 border border-slate-800 hover:border-slate-700 transition-all px-4 py-3 rounded-lg cursor-pointer select-none group">
+                  <input 
+                    type="checkbox" 
+                    checked={includeVehicleHire} 
+                    onChange={(e) => setIncludeVehicleHire(e.target.checked)}
+                    className="w-4 h-4 rounded text-red-600 bg-slate-950 border-slate-700 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-red-600"
+                  />
+                  <div className="flex items-center gap-2">
+                    <Car className="w-4 h-4 text-slate-400 group-hover:text-red-500 transition-colors" />
+                    <span className="text-xs md:text-sm font-semibold text-slate-200">{pricing[activeTab].hireLabel}</span>
+                  </div>
+                </label>
+              </div>
+            )}
+
             <div className="grid md:grid-cols-3 gap-6 items-start">
-              {pricing[activeTab].packages.map((pkg, idx) => (
-                <div key={idx} className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 p-6 rounded-xl transition-all relative group">
-                  <div className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-2">Duration</div>
-                  <h4 className="text-xl font-bold text-white mb-4">{pkg.hours}</h4>
-                  <div className="text-3xl font-black text-red-500 mb-4">{pkg.price}</div>
-                  <p className="text-slate-400 text-xs leading-relaxed mb-6 border-t border-slate-800/60 pt-4">
-                    {pkg.desc}
-                  </p>
-                  <a href={`tel:${contactInfo.phone}`} className="w-full text-center block bg-slate-800 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-wider py-3 rounded transition-colors">
-                    Book Training Slot
-                  </a>
-                </div>
-              ))}
+              {pricing[activeTab].packages.map((pkg, idx) => {
+                const hasAddon = includeVehicleHire && activeTab !== 'learners';
+                const finalPrice = hasAddon ? pkg.price + pricing[activeTab].hirePrice : pkg.price;
+
+                return (
+                  <div key={idx} className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 p-6 rounded-xl transition-all relative group">
+                    <div className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-2">Duration</div>
+                    <h4 className="text-xl font-bold text-white mb-4">{pkg.hours}</h4>
+                    
+                    <div className="mb-4">
+                      <div className="text-3xl font-black text-red-500">
+                        R{finalPrice.toLocaleString('en-ZA')}
+                      </div>
+                      {hasAddon && (
+                        <div className="text-xs text-slate-400 font-medium mt-1">
+                          (R{pkg.price.toLocaleString('en-ZA')} package + R{pricing[activeTab].hirePrice} hire)
+                        </div>
+                      )}
+                    </div>
+
+                    <p className="text-slate-400 text-xs leading-relaxed mb-6 border-t border-slate-800/60 pt-4">
+                      {pkg.desc}
+                    </p>
+                    
+                    <a 
+                      href={generateWhatsAppLink(activeTab, pkg.hours, pkg.price)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full text-center block bg-slate-800 hover:bg-green-600 hover:text-white text-slate-200 text-xs font-bold uppercase tracking-wider py-3 rounded transition-colors shadow-sm"
+                    >
+                      Secure Training Slot
+                    </a>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Inclusions & Ancillary Rates */}
@@ -193,13 +263,6 @@ export default function App() {
                 </div>
               ))}
             </div>
-
-            {/* Test Logistics Hire Information */}
-            {activeTab !== 'learners' && (
-              <div className="mt-4 bg-slate-900/40 border border-slate-800 p-4 rounded-xl text-center text-xs text-slate-400">
-                Need operational infrastructure for your final test? <span className="text-white font-semibold">Car Hire for Test Day: R650</span> | <span className="text-white font-semibold">Truck Hire for Test Day: R700</span>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -223,7 +286,7 @@ export default function App() {
                   "{t.text}"
                 </p>
               </div>
-              <span className="text-xs font-bold text-white uppercase tracking-wider tracking-wide border-t border-slate-800/60 pt-4 block">
+              <span className="text-xs font-bold text-white uppercase tracking-wider border-t border-slate-800/60 pt-4 block">
                 — {t.name}
               </span>
             </div>
