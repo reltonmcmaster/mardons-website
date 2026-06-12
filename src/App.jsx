@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Relative assets paths to ensure compatibility with GitHub Pages routing configurations
-import logoImg from './images/logo.png';
-import fleetAboutImg from './images/fleet-about.jpg';
-import fleetHeroImg from './images/fleet-hero.jpg';
-import bannerImg from './images/banner.png';
+// NOTE: Assets inside the public folder do not need JS imports. 
+// We use direct absolute paths which Vite resolves beautifully for static builds.
+const logoImg = 'images/logo.png';
+const fleetAboutImg = 'images/fleet-about.jpg';
+const fleetHeroImg = 'images/fleet-hero.jpg';
+const bannerImg = 'images/banner.png';
 
 const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -520,7 +521,6 @@ export default function App() {
       </section>
 
       {/* Footer Details */}
-      {/* Refined for premium feel layout, contrast hierarchy, spacing alignment, and centered button modules */}
       <footer className="bg-slate-950 border-t border-slate-900 pt-16 pb-8 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-stretch">
           
@@ -541,7 +541,6 @@ export default function App() {
               </div>
             </div>
             
-            {/* Premium Typography Hierarchy: Sentence case, clean weight, balanced line heights */}
             <h4 className="text-sm font-bold text-red-500 tracking-wide mb-2">
               Guiding Gqeberha with Confidence
             </h4>
@@ -574,7 +573,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Column 3: Booking Hotline Box (Enhanced Padding & Matching Corners) */}
+          {/* Column 3: Booking Hotline Box */}
           <div className="flex flex-col justify-center">
             <div className="bg-slate-900 border border-slate-800 p-8 rounded-xl flex flex-col justify-between h-full shadow-inner">
               <div>
@@ -583,7 +582,6 @@ export default function App() {
                   Have specific scoping questions regarding testing slots or vehicle availability? Give our team a call directly.
                 </p>
               </div>
-              {/* Centered Button Layout Refinement with Balanced Corner Radii */}
               <a href={`tel:${contactInfo.phone}`} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-md">
                 <Phone className="w-3.5 h-3.5 fill-current" />
                 <span className="tracking-widest">Initiate Call</span>
@@ -597,7 +595,6 @@ export default function App() {
           <div>
             Copyright © {new Date().getFullYear()} Mardons Driving Academy. All Rights Reserved.
           </div>
-          {/* Relocated Social Icons to sit neatly alongside the copyright bar layout context */}
           <div className="flex gap-5 items-center bg-slate-950 px-4 py-1.5 rounded-full border border-slate-900">
             <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-blue-500 transition-colors p-1" title="Facebook">
               <Facebook className="w-4 h-4" />
