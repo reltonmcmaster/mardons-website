@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Car, Facebook, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Custom Simple SVG WhatsApp Icon component since lucide-react doesn't export brand shapes directly
 const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
     <path fillRule="evenodd" d="M12.004 2c-5.525 0-10 4.477-10 10 0 1.954.563 3.776 1.533 5.312L2 22l4.83-1.482A9.948 9.948 0 0012.004 22c5.523 0 10-4.477 10-10s-4.477-10-10-10zm4.587 13.565c-.29.412-1.42 1.05-1.91 1.107-.442.052-.907.07-2.612-.633a10.015 10.015 0 01-4.47-3.923c-.502-.67-.803-1.455-.803-2.278 0-1.745 1.09-2.392 1.482-2.736.332-.293.498-.344.664-.344l.442.012c.166.006.388-.063.608.465.233.56.797 1.95.864 2.088.067.137.11.3.022.48-.088.177-.132.29-.265.445l-.398.471c-.133.153-.272.32-.117.587.155.266.69 1.134 1.48 1.838.79.704 1.458.922 1.724 1.056.265.133.42.112.575-.067.155-.178.663-.772.84-1.04.177-.266.354-.222.597-.133.243.088 1.548.73 1.814.864.265.133.442.2.508.312.067.112.067.653-.223 1.065z" clipRule="evenodd" />
@@ -107,14 +106,13 @@ export default function App() {
     { name: 'Lucretia Roman', text: 'The most patient crew in the area. Best booking decision I ever made for my career path.' }
   ];
 
-  // Group into frames of 6 cards for carousel calculations
   const totalSlides = Math.ceil(testimonials.length / 6);
 
   const startAutoPlay = () => {
     stopAutoPlay();
     autoPlayRef.current = setInterval(() => {
       setCurrentSlide(prev => (prev + 1) % totalSlides);
-    }, 6000); // Cycles smoothly every 6 seconds
+    }, 6000);
   };
 
   const stopAutoPlay = () => {
@@ -170,16 +168,25 @@ export default function App() {
       </div>
 
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4">
+      <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-3">
         <div className="max-w-7xl mx-auto flex justify-between items-center w-full">
+          {/* UPDATED: Incorporated Official Transparent Brand Logo Asset */}
           <div className="flex items-center gap-3">
-            <div className="text-xl font-black tracking-tighter text-white">
+            <img 
+              src={`${import.meta.env.BASE_URL}images/logo.png`} 
+              alt="Mardons Driving Academy Logo" 
+              className="h-10 w-auto object-contain bg-slate-900/50 p-1 rounded"
+              onError={(e) => {
+                // Safe text-based fallback in case path changes during local testing
+                e.target.style.display = 'none';
+                document.getElementById('nav-logo-text').style.display = 'block';
+              }}
+            />
+            <div id="nav-logo-text" className="text-xl font-black tracking-tighter text-white hidden">
               MARDONS<span className="text-red-500">.</span>
             </div>
-            <span className="text-xs uppercase tracking-widest text-slate-400 border-l border-slate-700 pl-3 hidden sm:inline">Driving Academy</span>
           </div>
           
-          {/* UPDATED ACTION HUB: Standardized With Live WhatsApp Navigation Endpoint */}
           <div className="flex items-center gap-5">
             <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors" title="Facebook">
               <Facebook className="w-5 h-5" />
@@ -199,7 +206,10 @@ export default function App() {
 
       {/* Hero Section */}
       <header className="relative bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 py-24 px-6 border-b border-slate-900 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(185,28,28,0.08),transparent_50%)]" />
+        {/* Dynamic Image Overlay Depth Blend */}
+        <div className="absolute inset-0 z-0 opacity-10 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/fleet-hero.jpg)` }} />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(185,28,28,0.08),transparent_50%)] z-0" />
+        
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <span className="text-xs uppercase tracking-widest font-bold text-red-500 bg-red-950/50 border border-red-900/50 px-3 py-1 rounded-full">
             The Gold Standard in Gqeberha
@@ -250,6 +260,38 @@ export default function App() {
         </div>
       </section>
 
+      {/* NEW: Visual Fleet Presentation Showcase Grid Block */}
+      <section className="bg-slate-900/10 border-t border-slate-900 py-16 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-xs font-bold text-red-500 uppercase tracking-widest">Our Fleet in Action</span>
+            <h2 className="text-2xl md:text-3xl font-black text-white mt-2">Real Vehicles, Real Success</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="overflow-hidden rounded-xl border border-slate-800 shadow-xl bg-slate-900/50 group">
+              <img 
+                src={`${import.meta.env.BASE_URL}images/fleet-about.jpg`} 
+                alt="Mardons Driving Academy VW Polo Fleet Lineup" 
+                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="p-4 text-center border-t border-slate-800">
+                <p className="text-xs font-semibold text-slate-400">Dual-controlled, late-model training fleet prepared daily.</p>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-slate-800 shadow-xl bg-slate-900/50 group">
+              <img 
+                src={`${import.meta.env.BASE_URL}images/fleet-hero.jpg`} 
+                alt="Mardons Training Cars on Track Location" 
+                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="p-4 text-center border-t border-slate-800">
+                <p className="text-xs font-semibold text-slate-400">Our pristine instruction assets ready for yard and track routines.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Interactive Pricing Section */}
       <section id="packages" className="bg-slate-900/20 border-y border-slate-900/60 py-24 px-6 relative">
         <div className="max-w-7xl mx-auto">
@@ -289,7 +331,6 @@ export default function App() {
 
             {/* Pricing Matrix Architecture */}
             {activeTab === 'learners' ? (
-              /* UPDATED SPEC 3: Cleanly Center Aligned Content Frame With Scaled Fitting Proportions */
               <div className="max-w-xl mx-auto">
                 {pricing.learners.packages.map((pkg, idx) => (
                   <div key={idx} className="bg-slate-900 border-2 border-red-900/40 p-8 rounded-2xl flex flex-col items-center text-center shadow-2xl">
@@ -322,7 +363,6 @@ export default function App() {
                   return (
                     <div key={idx} className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 p-6 rounded-xl transition-all relative flex flex-col justify-between min-h-[380px]">
                       <div>
-                        {/* UPDATED SPEC 7: Custom Identity Tags nested beautifully on each module card */}
                         <div className="flex justify-between items-start mb-3">
                           <div>
                             <div className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-1">Duration</div>
@@ -349,7 +389,6 @@ export default function App() {
                         </p>
                       </div>
                       
-                      {/* Integrated Internal Checkbox Interface */}
                       <div className="space-y-4 pt-2">
                         <label className="flex items-center gap-2.5 bg-slate-950/60 border border-slate-800/80 hover:border-slate-700/60 px-3 py-2 rounded-md cursor-pointer select-none transition-colors w-full">
                           <input 
@@ -378,7 +417,6 @@ export default function App() {
               </div>
             )}
 
-            {/* Inclusions Matrix Horizontal Display Grid */}
             <div className="mt-12 bg-slate-900/40 border border-slate-800/60 p-6 rounded-xl">
               <div className="text-xs font-bold uppercase text-slate-400 mb-4 tracking-wider text-center lg:text-left">
                 {activeTab === 'learners' ? "What you'll get:" : "Package Inclusions & Rates:"}
@@ -398,7 +436,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* UPDATED SPEC 2: Premium 24-Card Sliding Testimonial Carousel Architecture */}
+      {/* Sliding Testimonial Carousel */}
       <section id="testimonials" className="max-w-7xl mx-auto py-24 px-6 relative group/carousel">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-black tracking-tight text-white mb-3">Endorsed By Drivers in The Bay</h2>
@@ -407,7 +445,6 @@ export default function App() {
           </p>
         </div>
 
-        {/* Carousel Viewing Deck Container */}
         <div 
           className="overflow-hidden relative px-2"
           onMouseEnter={stopAutoPlay}
@@ -417,7 +454,6 @@ export default function App() {
             className="flex transition-transform duration-700 ease-in-out"
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
-            {/* Split total cards perfectly across calculation groups */}
             {[...Array(totalSlides)].map((_, slideIdx) => (
               <div key={slideIdx} className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {testimonials.slice(slideIdx * 6, (slideIdx * 6) + 6).map((t, idx) => (
@@ -440,7 +476,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Manual Controller Navigation Handles */}
         <button 
           onClick={() => setCurrentSlide(prev => (prev === 0 ? totalSlides - 1 : prev - 1))}
           className="absolute left-0 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-red-600 border border-slate-800 p-2.5 rounded-full text-slate-300 hover:text-white transition-all shadow-xl opacity-80 group-hover/carousel:opacity-100 hidden md:block"
@@ -456,7 +491,6 @@ export default function App() {
           <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Navigation Indicator Jump Dots */}
         <div className="flex justify-center gap-2 mt-8">
           {[...Array(totalSlides)].map((_, idx) => (
             <button
@@ -473,19 +507,29 @@ export default function App() {
       <footer className="bg-slate-950 border-t border-slate-900 py-16 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-start">
           <div>
-            {/* UPDATED SPEC 4: Custom Strategic Brand Paragraph Statements */}
-            <div className="text-xl font-black tracking-tighter text-white mb-2">
-              MARDONS Driving Academy
+            {/* UPDATED: Integrated Official Brand Identity Mark into Footer Grid Column */}
+            <div className="flex flex-col gap-3 mb-4">
+              <img 
+                src={`${import.meta.env.BASE_URL}images/logo.png`} 
+                alt="Mardons Driving Academy Footer Logo" 
+                className="h-12 w-auto object-contain bg-slate-900/30 p-1 rounded self-start"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  document.getElementById('footer-brand-fallback').style.display = 'block';
+                }}
+              />
+              <div id="footer-brand-fallback" className="text-xl font-black tracking-tighter text-white hidden">
+                MARDONS Driving Academy
+              </div>
+              <div className="text-xs text-red-500 font-bold uppercase tracking-wider">
+                Guiding Gqeberha with care and confidence
+              </div>
             </div>
-            <div className="text-xs text-red-500 font-bold uppercase tracking-wider mb-4">
-              Guiding Gqeberha with care and confidence
-            </div>
-            <p className="text-slate-400 text-xs leading-relaxed max-w-sm mb-6 space-y-2">
+            <p className="text-slate-400 text-xs leading-relaxed max-w-sm mb-6">
               We provide modern, safe vehicles and a teaching style built on patience and trust. 
               Our mission is simple: to help every learner feel secure, supported, and ready for the road. 
               With Mardons, you’re not just learning to drive — you’re building confidence for life.
             </p>
-            {/* Amplified Brand Footers */}
             <div className="flex gap-6 items-center">
               <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors p-1" title="Facebook">
                 <Facebook className="w-6 h-6" />
@@ -510,7 +554,6 @@ export default function App() {
                 <Mail className="w-4 h-4 text-red-500 flex-shrink-0" />
                 <span className="break-all">{contactInfo.email}</span>
               </a>
-              {/* UPDATED SPEC 6: Address anchor tracking without global lines */}
               <a href={contactInfo.mapUrl} target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:text-white transition-colors group">
                 <MapPin className="w-4 h-4 text-red-500 flex-shrink-0 group-hover:text-red-400" />
                 <span className="no-underline group-hover:text-red-400 transition-colors">
