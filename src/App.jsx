@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagram, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagram, ChevronLeft, ChevronRight, Award, Shield, Clock, Users } from 'lucide-react';
 
 const logoImg = 'images/logo.png';
 const fleetAboutImg = 'images/fleet-about.jpg';
@@ -12,10 +12,20 @@ const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
+const GoogleIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+  </svg>
+);
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('code8');
   const [selectedHireOptions, setSelectedHireOptions] = useState({});
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const autoPlayRef = useRef(null);
 
   const contactInfo = {
@@ -134,6 +144,19 @@ export default function App() {
     return () => stopAutoPlay();
   }, [totalSlides]);
 
+  // Track page scroll offset to toggle scroll styling effects dynamically
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
   };
@@ -171,72 +194,46 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-red-600 selection:text-white pt-[114px]">
       
-      {/* 2-TIER PREMIUM NAVIGATION SYSTEM (Inspired by your uploaded layout) */}
-      <header className="sticky top-0 z-50 w-full shadow-2xl">
-        {/* Tier 1: Actionable Utility Details Strip */}
-        <div className="bg-red-700 text-white text-xs font-semibold py-2.5 px-6 border-b border-red-800 hidden sm:block">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <div className="flex items-center gap-6">
-              <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-                <Phone className="w-3.5 h-3.5 fill-current" />
-                <span>Call Hotline: {contactInfo.phone}</span>
-              </a>
-              <span className="text-red-400">|</span>
-              <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-                <Mail className="w-3.5 h-3.5" />
-                <span>{contactInfo.email}</span>
-              </a>
+      {/* INTEGRATED CUSTOM NAVIGATION HOUSING WRAPPER SYSTEM */}
+      <div 
+        id="header-navigation-wrapper" 
+        className={isScrolled ? 'scrolled' : ''}
+      >
+        {/* MODULE 1: RED ANNOUNCEMENT MARQUEE */}
+        <div id="nav-marquee-banner">
+          <div className="nav-marquee-container">
+            <div className="nav-marquee-track">
+              <span className="nav-marquee-item"><i className="fa-solid fa-star"></i> 4.9 Google Rating</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-certificate"></i> Certified K53</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-shield-halved"></i> Fully Insured Vehicles</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-award"></i> Years in Business</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-face-smile"></i> 500+ Satisfied Drivers</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-location-dot"></i> #1 Rated Academy in Gqeberha</span>
             </div>
-            <div className="tracking-wide uppercase text-[10px] font-black">
-              Premium K53 Instruction In Gqeberha
+            <div className="nav-marquee-track">
+              <span className="nav-marquee-item"><i className="fa-solid fa-star"></i> 4.9 Google Rating</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-certificate"></i> Certified K53</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-shield-halved"></i> Fully Insured Vehicles</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-award"></i> Years in Business</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-face-smile"></i> 500+ Satisfied Drivers</span>
+              <span className="nav-marquee-item"><i className="fa-solid fa-location-dot"></i> #1 Rated Academy in Gqeberha</span>
             </div>
           </div>
         </div>
 
-        {/* Tier 2: Branding Deck Header */}
-        <nav className="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-3.5">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            
-            {/* Left Brand Area */}
-            <div className="flex items-center gap-3">
-              <img 
-                src={logoImg} 
-                alt="Mardons Driving Academy Logo" 
-                className="h-12 md:h-14 w-auto object-contain rounded"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  document.getElementById('nav-logo-text').style.display = 'block';
-                }}
-              />
-              <div id="nav-logo-text" className="text-lg font-black tracking-tighter text-white hidden">
-                MARDONS<span className="text-red-500">.</span>
-              </div>
-            </div>
-            
-            {/* Mid Sequential Index Anchors */}
-            <div className="hidden md:flex items-center gap-8 text-xs uppercase tracking-wider font-bold text-slate-300">
-              <a href="#features" className="hover:text-red-500 transition-colors">Core Features</a>
-              <a href="#packages" className="hover:text-red-500 transition-colors">Rates & Packages</a>
-              <a href="#testimonials" className="hover:text-red-500 transition-colors">Testimonials</a>
-            </div>
-
-            {/* Right Action Anchor */}
-            <div>
-              <a 
-                href={contactInfo.globalWhatsappMsg} 
-                target="_blank" 
-                rel="noreferrer" 
-                className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded transition-all shadow-md flex items-center gap-2"
-              >
-                <WhatsAppIcon className="w-4 h-4" />
-                <span>Book Now</span>
-              </a>
+        {/* MODULE 2: LOWER NAVIGATION STRIP */}
+        <nav id="main-nav">
+          <div className="nav-container">
+            <div className="nav-links-wrap">
+              <a href="#features" className="nav-link">Core Features</a>
+              <a href="#packages" className="nav-link">Rates & Packages</a>
+              <a href="#testimonials" className="nav-link">Testimonials</a>
             </div>
           </div>
         </nav>
-      </header>
+      </div>
 
       {/* Hero Section */}
       <section className="relative bg-slate-950 py-28 px-6 border-b border-slate-900 overflow-hidden min-h-[60vh] flex items-center justify-center">
@@ -458,7 +455,7 @@ export default function App() {
               </div>
             )}
 
-            {/* Center aligned lists block */}
+            {/* Inclusions elements */}
             <div className="mt-12 bg-slate-900/40 border border-slate-800/60 p-6 rounded-xl">
               <div className="text-xs font-bold uppercase text-slate-400 mb-6 tracking-wider text-center">
                 {activeTab === 'learners' ? "What you'll get:" : "Package Inclusions & Rates:"}
@@ -545,32 +542,33 @@ export default function App() {
         </div>
       </section>
 
-      {/* NEW INTEGRATION: LAYOUT VARIANT 4 DESIGN FOOTER */}
+      {/* FOOTER SECTION */}
       <footer className="bg-slate-900/20 border-t border-slate-900 pt-16 pb-12 px-6 text-center">
         <div className="max-w-4xl mx-auto space-y-8">
           
-          {/* Logo Mark Rendering inside Footer Block */}
           <div className="flex justify-center items-center">
             <img 
               src={logoImg} 
-              alt="Mardons Footer Logo" 
-              className="h-16 w-auto object-contain rounded"
+              alt="MDA Footer Logo" 
+              className="h-24 md:h-28 w-auto object-contain rounded"
               onError={(e) => { e.target.style.display = 'none'; }}
             />
           </div>
 
-          <div className="text-2xl font-black text-white tracking-tight uppercase">
-            MARDONS Driving Academy
+          <div className="text-3xl font-black text-white tracking-widest uppercase">
+            MDA
           </div>
           
-          <p className="text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
-            <span className="text-red-500 font-bold block mb-2 text-xs uppercase tracking-widest">
+          <div className="max-w-2xl mx-auto text-center">
+            <span className="text-red-500 font-extrabold block mb-4 text-sm md:text-base uppercase tracking-widest">
               Guiding Gqeberha with Confidence
             </span>
-            Modern, safe vehicles. Patient, trusted instruction. At Mardons, every lesson builds skill, safety, and lifelong confidence.
-          </p>
+            <div className="text-sm text-slate-300 leading-relaxed font-medium space-y-2">
+              <p>Modern, safe vehicles. Patient, trusted instruction.</p>
+              <p>At Mardons, every lesson builds skill, safety, and lifelong confidence.</p>
+            </div>
+          </div>
 
-          {/* Inline Uniform Contact Vectors */}
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-xs font-semibold text-slate-400 pt-2">
             <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-2 hover:text-white transition-colors">
               <Phone className="w-4 h-4 text-red-500 fill-current" /> 
@@ -586,16 +584,18 @@ export default function App() {
             </a>
           </div>
 
-          {/* Social Anchors Baseline Deck */}
-          <div className="flex justify-center gap-6 pt-4 border-t border-slate-900/60 max-w-xs mx-auto">
-            <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors" title="Facebook">
-              <Facebook className="w-5 h-5" />
+          <div className="flex justify-center items-center gap-5 pt-4 border-t border-slate-900/60 max-w-xs mx-auto">
+            <a href={contactInfo.googleSearch} target="_blank" rel="noreferrer" className="w-10 h-10 bg-slate-900 hover:bg-slate-800 rounded-full flex items-center justify-center border border-slate-800 transition-colors" title="Google Search">
+              <GoogleIcon className="w-4 h-4" />
             </a>
-            <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-pink-500 transition-colors" title="Instagram">
-              <Instagram className="w-5 h-5" />
+            <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-pink-500 rounded-full flex items-center justify-center border border-slate-800 transition-colors" title="Instagram">
+              <Instagram className="w-4 h-4" />
             </a>
-            <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-green-500 transition-colors" title="WhatsApp">
-              <WhatsAppIcon className="w-5 h-5" />
+            <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-blue-500 rounded-full flex items-center justify-center border border-slate-800 transition-colors" title="Facebook">
+              <Facebook className="w-4 h-4" />
+            </a>
+            <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-green-500 rounded-full flex items-center justify-center border border-slate-800 transition-colors" title="WhatsApp">
+              <WhatsAppIcon className="w-4 h-4" />
             </a>
           </div>
 
@@ -605,65 +605,13 @@ export default function App() {
         </div>
       </footer>
 
-      {/* STOLEN AND ADAPTED FLOATING MATRIX CALL ACTION MODULE
-        Matches your exact design style layout color spectrums.
-      */}
-      <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-center gap-3">
-        {/* Secondary Communication Layers Stack */}
-        <div className="flex flex-col gap-2.5 items-center transition-all duration-300">
-          
-          {/* Custom Google Intent Anchor Link */}
-          <a 
-            href={contactInfo.googleSearch}
-            target="_blank" 
-            rel="noreferrer"
-            className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center shadow-xl border border-slate-800/80 hover:border-slate-700/80 transition-all hover:-translate-y-0.5 group"
-            title="Search Mardons on Google"
-          >
-            <Search className="w-4 h-4 text-slate-400 group-hover:text-amber-500 transition-colors" />
-          </a>
-
-          {/* Instagram Layer */}
-          <a 
-            href={contactInfo.instagram}
-            target="_blank" 
-            rel="noreferrer"
-            className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center shadow-xl border border-slate-800/80 hover:border-slate-700/80 transition-all hover:-translate-y-0.5 group"
-            title="Follow our Instagram Feed"
-          >
-            <Instagram className="w-4 h-4 text-slate-400 group-hover:text-pink-500 transition-colors" />
-          </a>
-
-          {/* Facebook Layer */}
-          <a 
-            href={contactInfo.facebook}
-            target="_blank" 
-            rel="noreferrer"
-            className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center shadow-xl border border-slate-800/80 hover:border-slate-700/80 transition-all hover:-translate-y-0.5 group"
-            title="Connect via Facebook"
-          >
-            <Facebook className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
-          </a>
-
-          {/* WhatsApp Layer */}
-          <a 
-            href={contactInfo.globalWhatsappMsg}
-            target="_blank" 
-            rel="noreferrer"
-            className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center shadow-xl border border-slate-800/80 hover:border-slate-700/80 transition-all hover:-translate-y-0.5 group"
-            title="Chat on WhatsApp"
-          >
-            <WhatsAppIcon className="w-4 h-4 text-slate-400 group-hover:text-green-500 transition-colors" />
-          </a>
-        </div>
-
-        {/* Master Pulse Calling Anchor Trigger Element */}
+      {/* SINGLE FLOATING PHONE HOTLINE TRIGGER CONTROLLER */}
+      <div className="fixed bottom-6 right-6 z-[9999]">
         <a 
           href={`tel:${contactInfo.phone}`}
           className="relative w-14 h-14 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group"
           title="Call Hotline Instantly"
         >
-          {/* Pulsing Outer Concentric Aura Effect rings */}
           <span className="absolute inset-0 rounded-full bg-red-600/40 animate-ping opacity-75 pointer-events-none" />
           <span className="absolute -inset-1 rounded-full bg-red-600/20 animate-pulse pointer-events-none" />
           
