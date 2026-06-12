@@ -3,8 +3,9 @@ import { Phone, Mail, MapPin, CheckCircle2, Award, Shield, Users, ArrowRight, St
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('code8');
-  // State to track if the user wants to add vehicle hire for test day
-  const [includeVehicleHire, setIncludeVehicleHire] = useState(false);
+  
+  // FIXED: Object state to track individual checkboxes for each package card uniquely
+  const [selectedHireOptions, setSelectedHireOptions] = useState({});
 
   const contactInfo = {
     phone: '076 029 5823',
@@ -18,7 +19,7 @@ export default function App() {
 
   const pricing = {
     code8: {
-      title: 'Code 8 Manual (Light Motor Vehicle)',
+      title: 'Code 8 License',
       subtitle: 'Taught in premium, brand-new VW Polos.',
       hirePrice: 650,
       hireLabel: 'Add Car Hire for Test Day (+R650)',
@@ -35,7 +36,7 @@ export default function App() {
       ]
     },
     code10: {
-      title: 'Code 10 Manual (Heavy Motor Vehicle)',
+      title: 'Code 10 License',
       subtitle: 'Taught on industry-standard commercial trucks.',
       hirePrice: 700,
       hireLabel: 'Add Truck Hire for Test Day (+R700)',
@@ -52,38 +53,53 @@ export default function App() {
       ]
     },
     learners: {
-      title: 'Learner\'s License Tuition',
-      subtitle: 'One-on-one professional theory instruction.',
+      title: 'Learner’s License Package',
+      subtitle: 'Comprehensive preparation for your learner’s test',
       packages: [
-        { hours: '2 Sessions (1 Hour Each)', price: 400, desc: 'Personalized interactive breakdown covering the entire new electronic testing framework.' }
+        { 
+          hours: '2 Sessions (1 Hour Each)', 
+          price: 400, 
+          desc: 'Comprehensive preparation for your learner’s test. Format: One-on-one professional theory instruction.',
+          isLearners: true
+        }
       ],
       extras: [
-        'All official premium learning materials provided',
-        'High pass rate preparation strategy',
-        '1-on-1 private tuition structure'
+        'Step-by-step guidance through the new electronic testing framework',
+        'Access to study material tailored to the K53 learner’s test',
+        'Ongoing assistance until you pass your learner’s test',
+        'Door-to-door service included for your convenience'
       ]
     }
   };
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
-    setIncludeVehicleHire(false);
   };
 
-  const generateWhatsAppLink = (category, hours, basePrice) => {
+  // Handle distinct item selection states safely based on tab and card index
+  const handleHireCheckboxChange = (tab, index, isChecked) => {
+    setSelectedHireOptions(prev => ({
+      ...prev,
+      [`${tab}-${index}`]: isChecked
+    }));
+  };
+
+  const generateWhatsAppLink = (category, hours, basePrice, cardIndex) => {
     let message = "";
     const activeCategory = pricing[category];
-    const totalPrice = includeVehicleHire && category !== 'learners' ? basePrice + activeCategory.hirePrice : basePrice;
+    const isHireSelected = !!selectedHireOptions[`${category}-${cardIndex}`];
+    
+    const totalPrice = isHireSelected && category !== 'learners' ? basePrice + activeCategory.hirePrice : basePrice;
     const formattedTotal = `R${totalPrice.toLocaleString('en-ZA')}`;
     const formattedBase = `R${basePrice.toLocaleString('en-ZA')}`;
 
     if (category === 'learners') {
-      message = `Hi Mardons Driving Academy, I would like to book the Learner's License Tuition package (${hours} for R400). Please let me know available slots.`;
+      message = `Hi Mardons Driving Academy, I would like to book the Learner’s License Package (2 Sessions for R400). Please let me know available slots.`;
     } else {
       const formattedCategory = category === 'code8' ? 'Code 8 Manual' : 'Code 10 Manual';
       const vehicleType = category === 'code8' ? 'car hire' : 'truck hire';
       
-      if (includeVehicleHire) {
+      if (isHireSelected) {
         message = `Hi Mardons Driving Academy, I want to book the ${formattedCategory} package for ${hours} and include the test day ${vehicleType}. Total comes to ${formattedTotal} (${formattedBase} + R${activeCategory.hirePrice} hire). Please let me know how we can get started.`;
       } else {
         message = `Hi Mardons Driving Academy, I am interested in booking the ${formattedCategory} package for ${hours} (${formattedBase}). Please let me know how we can get started.`;
@@ -92,6 +108,33 @@ export default function App() {
 
     return `https://wa.me/${contactInfo.whatsappNum}?text=${encodeURIComponent(message)}`;
   };
+
+  const testimonials = [
+    { name: 'Janine Baartman', text: 'Excellent service. I would recommend Mardons Driving Academy to everyone I know. They really are the best in the bay.' },
+    { name: 'Armand Erasmus', text: 'I was very happy with Mardons Driving Academy. They were very nice and are always willing to help where ever they could.' },
+    { name: 'Mnumzana Makhathini', text: "I got my driver's license today and thanks to the professional instructor Mona who really made it easier for me to pass my test. Mardon's driving Academy is the best." },
+    { name: 'Chanté Jooste', text: 'Would definitely recomend MDA. Thanks so much Mona, Alfredo & Siya for preparing me for the road ahead. MDA - THE BEST IN THE BAY!' },
+    { name: 'Lwazi Mthembu', text: 'Top tier driving school. Instructors have real patience and they know the Port Elizabeth testing routes perfectly. Passed first time!' },
+    { name: 'Denver Hendricks', text: 'Dankie Mona en span! Reputable service from start to finish. The VW Polo is beautiful and smooth to learn with.' },
+    { name: 'Sarah-Lee Meyer', text: 'Highly professional setups. I was so nervous about parallel parking, but my instructor broke it down with simple steps.' },
+    { name: 'Siyabonga Ngcobo', text: 'The absolute best in Gqeberha. They pick you up right at your door and they do not rush you. Very neat cars.' },
+    { name: 'Gavin Whitehead', text: 'Booked the Code 10 package. Excellent yard instruction, very clean trucks. Got my license today with zero hassles.' },
+    { name: 'Rochelle Cupido', text: 'Super friendly and highly structured. Felt safe behind the wheel from day one. Definitely recommend to everyone in PE.' },
+    { name: 'Zolani Ndlovu', text: 'Ncedile kakhulu! Mona helped me get over my road anxiety. The mock test yard training made the real test feel easy.' },
+    { name: 'Bradley Jacobs', text: 'Professional lessons at a great price. Best academy in the bay by far. No hidden charges.' },
+    { name: 'Thandiswa Ncube', text: 'Thank you MDA for the amazing theory training and the driving patience. Passed my Code 8 beautifully.' },
+    { name: 'Justin Kirsten', text: 'Patient instruction, modern fleet, and clear communication. If you want to pass without stress, choose Mardons.' },
+    { name: 'Chantel Williams', text: 'Aswem experience! The instructors are calm and polite. Worth every cent for the safety alone.' },
+    { name: 'Khanyisa Mpofu', text: 'Incredibly great value. They assisted me all the way through the new electronic learners system. 5 stars!' },
+    { name: 'Pieter Potgieter', text: 'Great structure on the Code 10 modules. Clear vehicle dimensions explanation. Highly seasoned instructors.' },
+    { name: 'Shaneen Pretorius', text: 'Loved learning with Mardons. The brand new Polo makes a huge difference when mastering clutch control.' },
+    { name: 'Aphiwe Msimang', text: 'Isikolo esimangalisayo! Safe cars, patient teachers. Made getting my license a wonderful experience.' },
+    { name: 'Wayne Ferreira', text: 'Reliable door-to-door pickups. They never run late and they maximize your road hour completely. Excellent.' },
+    { name: 'Nadine Booysen', text: 'Very happy clients right here. Polite staff, affordable rates, and pristine cars. Thank you Alfredo!' },
+    { name: 'Mphathi Gxwala', text: 'Highly recommended for heavy vehicles. They teach you proper commercial road manners, not just passing tricks.' },
+    { name: 'Esther van der Merwe', text: 'Passed my test today! Incredible patient framework. They treat you with absolute respect.' },
+    { name: 'Lucretia Roman', text: 'The most patient crew in the area. Best booking decision I ever made for my career path.' }
+  ];
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-red-600 selection:text-white">
@@ -149,33 +192,30 @@ export default function App() {
         </div>
       </header>
 
-      {/* Core Highlights */}
+      {/* Core Highlights Component - UPDATED SHAPES */}
       <section id="features" className="max-w-7xl mx-auto py-20 px-6 grid md:grid-cols-3 gap-8">
         <div className="bg-slate-900/40 border border-slate-800/80 p-8 rounded-xl backdrop-blur-sm">
-          <div className="w-12 h-12 bg-red-950 text-red-500 rounded-lg flex items-center justify-center mb-6 border border-red-900/30">
-            <Shield className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-3">Premium VW Polo Fleet</h3>
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <span>🚘</span> Modern VW Polo Fleet
+          </h3>
           <p className="text-slate-400 text-sm leading-relaxed">
-            We exclusively utilize late-model Volkswagen Polos for all light vehicle training, ensuring maximum safety, ergonomic comfort, and modern handling properties.
+            We use new Volkswagen Polos for all light vehicle lessons. They’re safe, comfortable, and easy to handle — perfect for learning with confidence.
           </p>
         </div>
         <div className="bg-slate-900/40 border border-slate-800/80 p-8 rounded-xl backdrop-blur-sm">
-          <div className="w-12 h-12 bg-red-950 text-red-500 rounded-lg flex items-center justify-center mb-6 border border-red-900/30">
-            <Users className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-3">Certified, Patient Tuition</h3>
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <span>👩‍🏫</span> Patient, Certified Instructors
+          </h3>
           <p className="text-slate-400 text-sm leading-relaxed">
-            Every member of our team is fully qualified, highly motivated, and structurally vetted to deliver structured, highly patient training environments.
+            Our instructors are fully qualified and carefully selected. They teach with patience and structure, making sure every learner feels supported.
           </p>
         </div>
         <div className="bg-slate-900/40 border border-slate-800/80 p-8 rounded-xl backdrop-blur-sm">
-          <div className="w-12 h-12 bg-red-950 text-red-500 rounded-lg flex items-center justify-center mb-6 border border-red-900/30">
-            <Award className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-3">Exceptional Pass Rates</h3>
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <span>🎯</span> Proven Pass Rates
+          </h3>
           <p className="text-slate-400 text-sm leading-relaxed">
-            Our historical metrics show an exceptional track record of performance. We focus intensely on core confidence, ensuring you pass cleanly on test day.
+            We’ve helped countless learners succeed. With our focus on building confidence and core skills, you’ll be ready to pass your test smoothly.
           </p>
         </div>
       </section>
@@ -183,14 +223,18 @@ export default function App() {
       {/* Interactive Pricing Section */}
       <section id="packages" className="bg-slate-900/20 border-y border-slate-900/60 py-24 px-6 relative">
         <div className="max-w-7xl mx-auto">
+          {/* UPDATED HEADER AREA WITH CUSTOM BUDGET COPY */}
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white mb-4">Professional Pricing Matrices</h2>
-            <p className="text-slate-400 max-w-xl mx-auto text-sm">
-              All inclusive training bundles. No hidden infrastructure surcharges. Select your training category below.
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white mb-4">Cost Effective Packages To Suit Your Budget</h2>
+            <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
+              We have custom packages that have been tailor made to suit all budgets. <br/>
+              Get in touch today to discuss how we can help you succeed!
+            </p>
+            <p className="text-red-500 text-xs uppercase tracking-widest font-bold mt-6">
+              Select your training category below:
             </p>
             
-            {/* UPDATED: Specific descriptive labels for the tab layout */}
-            <div className="inline-flex p-1 bg-slate-900 rounded-lg mt-8 border border-slate-800 flex-wrap justify-center gap-1 sm:gap-0">
+            <div className="inline-flex p-1 bg-slate-900 rounded-lg mt-6 border border-slate-800 flex-wrap justify-center gap-1 sm:gap-0">
               <button onClick={() => handleTabChange('code8')} className={`px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'code8' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
                 Code 8 License
               </button>
@@ -214,14 +258,16 @@ export default function App() {
               </span>
             </div>
 
-            {/* Matrix Architecture */}
-            <div className={`grid gap-6 items-start ${activeTab === 'learners' ? 'max-w-md mx-auto grid-cols-1' : 'md:grid-cols-3'}`}>
+            {/* Pricing Output Matrix */}
+            <div className={`grid gap-6 items-start ${activeTab === 'learners' ? 'max-w-2xl mx-auto grid-cols-1' : 'md:grid-cols-3'}`}>
               {pricing[activeTab].packages.map((pkg, idx) => {
-                const hasAddon = includeVehicleHire && activeTab !== 'learners';
+                // FIXED: Each card reads from its own independent unique state location object map
+                const isThisCardSelected = !!selectedHireOptions[`${activeTab}-${idx}`];
+                const hasAddon = isThisCardSelected && !pkg.isLearners;
                 const finalPrice = hasAddon ? pkg.price + pricing[activeTab].hirePrice : pkg.price;
 
                 return (
-                  <div key={idx} className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 p-6 rounded-xl transition-all relative flex flex-col justify-between min-h-[340px]">
+                  <div key={idx} className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 p-6 rounded-xl transition-all relative flex flex-col justify-between min-h-[350px]">
                     <div>
                       <div className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-2">Duration</div>
                       <h4 className="text-xl font-bold text-white mb-4">{pkg.hours}</h4>
@@ -242,14 +288,14 @@ export default function App() {
                       </p>
                     </div>
                     
-                    {/* UPDATED: Integrated Internal Booking Checkbox Setup */}
+                    {/* Integrated Internal Booking Button-Checkbox Block */}
                     <div className="space-y-4 pt-2">
-                      {activeTab !== 'learners' && (
+                      {!pkg.isLearners && (
                         <label className="flex items-center gap-2.5 bg-slate-950/60 border border-slate-800/80 hover:border-slate-700/60 px-3 py-2 rounded-md cursor-pointer select-none transition-colors w-full">
                           <input 
                             type="checkbox" 
-                            checked={includeVehicleHire} 
-                            onChange={(e) => setIncludeVehicleHire(e.target.checked)}
+                            checked={isThisCardSelected} 
+                            onChange={(e) => handleHireCheckboxChange(activeTab, idx, e.target.checked)}
                             className="w-3.5 h-3.5 rounded text-red-600 bg-slate-900 border-slate-700 focus:ring-0 cursor-pointer accent-red-600"
                           />
                           <span className="text-[11px] font-semibold text-slate-300 tracking-wide">
@@ -259,12 +305,12 @@ export default function App() {
                       )}
                       
                       <a 
-                        href={generateWhatsAppLink(activeTab, pkg.hours, pkg.price)}
+                        href={generateWhatsAppLink(activeTab, pkg.hours, pkg.price, idx)}
                         target="_blank"
                         rel="noreferrer"
                         className="w-full text-center block bg-slate-800 hover:bg-green-600 hover:text-white text-slate-200 text-xs font-bold uppercase tracking-wider py-3 rounded transition-colors shadow-sm"
                       >
-                        Secure Training Slot
+                        {pkg.isLearners ? "Secure Learners License Package" : "Secure Training Slot"}
                       </a>
                     </div>
                   </div>
@@ -272,8 +318,11 @@ export default function App() {
               })}
             </div>
 
-            {/* UPDATED: Spacious, Equal-Sized Single Line Grid System */}
+            {/* Inclusions Row Layout Display */}
             <div className="mt-12 bg-slate-900/40 border border-slate-800/60 p-6 rounded-xl">
+              <div className="text-xs font-bold uppercase text-slate-400 mb-4 tracking-wider text-center lg:text-left">
+                {activeTab === 'learners' ? "What you'll get:" : "Package Inclusions & Rates:"}
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center lg:text-left">
                 {pricing[activeTab].extras.map((extra, idx) => (
                   <div key={idx} className="flex flex-col lg:flex-row items-center lg:items-start gap-3 bg-slate-950/40 border border-slate-900/80 p-4 rounded-lg flex-1 h-full justify-center lg:justify-start">
@@ -289,6 +338,33 @@ export default function App() {
         </div>
       </section>
 
+      {/* Customer Feedback - 24 REVIEW BLOCK METRIC */}
+      <section id="testimonials" className="max-w-6xl mx-auto py-24 px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-black tracking-tight text-white mb-3">Endorsed By Drivers in The Bay</h2>
+          <p className="text-slate-400 text-sm max-w-md mx-auto">
+            Real feedback from graduates who successfully passed their licensing tests under our instruction.
+          </p>
+        </div>
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {testimonials.map((t, idx) => (
+            <div key={idx} className="bg-slate-900/30 border border-slate-800/40 p-6 rounded-xl flex flex-col justify-between hover:border-slate-700/60 transition-all">
+              <div>
+                <div className="flex gap-1 text-amber-500 mb-4">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}
+                </div>
+                <p className="text-slate-300 text-xs italic leading-relaxed mb-6">
+                  "{t.text}"
+                </p>
+              </div>
+              <span className="text-[11px] font-bold text-red-500 uppercase tracking-wider border-t border-slate-800/60 pt-4 block">
+                — {t.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Footer Details */}
       <footer className="bg-slate-950 border-t border-slate-900 py-16 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-start">
@@ -299,7 +375,6 @@ export default function App() {
             <p className="text-slate-400 text-xs leading-relaxed max-w-xs mb-6">
               Vetted, high-end K53 educational design operating throughout Gqeberha. Built on execution, modern fleets, and complete safety profiles.
             </p>
-            {/* UPDATED: Amplified Footer Social Icon Targets */}
             <div className="flex gap-6 items-center">
               <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors p-1" title="Facebook">
                 <Facebook className="w-6 h-6" />
@@ -321,7 +396,6 @@ export default function App() {
                 <Mail className="w-4 h-4 text-red-500 flex-shrink-0" />
                 <span className="break-all">{contactInfo.email}</span>
               </a>
-              {/* UPDATED: Address anchors cleanly straight to specified mapUrl mapping */}
               <a href={contactInfo.mapUrl} target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:text-white transition-colors group">
                 <MapPin className="w-4 h-4 text-red-500 flex-shrink-0 group-hover:text-red-400" />
                 <span className="underline decoration-slate-700 underline-offset-4 group-hover:decoration-white transition-colors">
