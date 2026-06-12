@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 
+// Import assets directly so Vite tracks and packages them perfectly for GitHub Pages
+import logoImg from '/images/logo.png';
+import fleetAboutImg from '/images/fleet-about.jpg';
+import fleetHeroImg from '/images/fleet-hero.jpg';
+
 const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
     <path fillRule="evenodd" d="M12.004 2c-5.525 0-10 4.477-10 10 0 1.954.563 3.776 1.533 5.312L2 22l4.83-1.482A9.948 9.948 0 0012.004 22c5.523 0 10-4.477 10-10s-4.477-10-10-10zm4.587 13.565c-.29.412-1.42 1.05-1.91 1.107-.442.052-.907.07-2.612-.633a10.015 10.015 0 01-4.47-3.923c-.502-.67-.803-1.455-.803-2.278 0-1.745 1.09-2.392 1.482-2.736.332-.293.498-.344.664-.344l.442.012c.166.006.388-.063.608.465.233.56.797 1.95.864 2.088.067.137.11.3.022.48-.088.177-.132.29-.265.445l-.398.471c-.133.153-.272.32-.117.587.155.266.69 1.134 1.48 1.838.79.704 1.458.922 1.724 1.056.265.133.42.112.575-.067.155-.178.663-.772.84-1.04.177-.266.354-.222.597-.133.243.088 1.548.73 1.814.864.265.133.442.2.508.312.067.112.067.653-.223 1.065z" clipRule="evenodd" />
@@ -64,9 +69,9 @@ export default function App() {
       subtitle: 'Comprehensive preparation for your learner’s test',
       packages: [
         { 
-          hours: '2 Sessions (1 Hour Each)', 
+          hours: 'Study Pack + 2 Guided Sessions', 
           price: 400, 
-          desc: 'Comprehensive preparation for your learner’s test. Format: One-on-one professional theory instruction.',
+          desc: 'Includes official study material tailored to the K53 learner’s test\n2 one‑hour sessions of one‑on‑one professional theory instruction\nDesigned to give you confidence and clarity before exam day',
           isLearners: true
         }
       ],
@@ -145,7 +150,7 @@ export default function App() {
     const formattedBase = `R${basePrice.toLocaleString('en-ZA')}`;
 
     if (category === 'learners') {
-      message = `Hi Driving Academy, I would like to book the Learner’s License Package (2 Sessions for R400). Please let me know available slots.`;
+      message = `Hi Driving Academy, I would like to book the Learner’s License Package (Study Pack + 2 Guided Sessions for R400). Please let me know available slots.`;
     } else {
       const formattedCategory = category === 'code8' ? 'Code 8 Manual' : 'Code 10 Manual';
       const vehicleType = category === 'code8' ? 'car hire' : 'truck hire';
@@ -170,14 +175,12 @@ export default function App() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-3">
         <div className="max-w-7xl mx-auto flex justify-between items-center w-full">
-          {/* UPDATED: Incorporated Official Transparent Brand Logo Asset */}
           <div className="flex items-center gap-3">
             <img 
-              src={`${import.meta.env.BASE_URL}images/logo.png`} 
+              src={logoImg} 
               alt="Mardons Driving Academy Logo" 
               className="h-10 w-auto object-contain bg-slate-900/50 p-1 rounded"
               onError={(e) => {
-                // Safe text-based fallback in case path changes during local testing
                 e.target.style.display = 'none';
                 document.getElementById('nav-logo-text').style.display = 'block';
               }}
@@ -206,8 +209,7 @@ export default function App() {
 
       {/* Hero Section */}
       <header className="relative bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 py-24 px-6 border-b border-slate-900 overflow-hidden">
-        {/* Dynamic Image Overlay Depth Blend */}
-        <div className="absolute inset-0 z-0 opacity-10 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/fleet-hero.jpg)` }} />
+        <div className="absolute inset-0 z-0 opacity-10 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${fleetHeroImg})` }} />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(185,28,28,0.08),transparent_50%)] z-0" />
         
         <div className="max-w-5xl mx-auto text-center relative z-10">
@@ -260,7 +262,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* NEW: Visual Fleet Presentation Showcase Grid Block */}
+      {/* Visual Fleet Presentation Showcase Grid Block */}
       <section className="bg-slate-900/10 border-t border-slate-900 py-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -270,7 +272,7 @@ export default function App() {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="overflow-hidden rounded-xl border border-slate-800 shadow-xl bg-slate-900/50 group">
               <img 
-                src={`${import.meta.env.BASE_URL}images/fleet-about.jpg`} 
+                src={fleetAboutImg} 
                 alt="Mardons Driving Academy VW Polo Fleet Lineup" 
                 className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -280,7 +282,7 @@ export default function App() {
             </div>
             <div className="overflow-hidden rounded-xl border border-slate-800 shadow-xl bg-slate-900/50 group">
               <img 
-                src={`${import.meta.env.BASE_URL}images/fleet-hero.jpg`} 
+                src={fleetHeroImg} 
                 alt="Mardons Training Cars on Track Location" 
                 className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -331,17 +333,22 @@ export default function App() {
 
             {/* Pricing Matrix Architecture */}
             {activeTab === 'learners' ? (
+              /* UPDATED SPEC 1: New layout context with explicit spacing rules inside shape container */
               <div className="max-w-xl mx-auto">
                 {pricing.learners.packages.map((pkg, idx) => (
                   <div key={idx} className="bg-slate-900 border-2 border-red-900/40 p-8 rounded-2xl flex flex-col items-center text-center shadow-2xl">
-                    <span className="text-[11px] uppercase tracking-widest font-black text-red-500 bg-red-950/60 border border-red-900/40 px-3 py-1 rounded-full mb-3">
-                      🚗 Professional Theory Course
+                    <span className="text-[11px] uppercase tracking-widest font-black text-red-500 bg-red-950/60 border border-red-900/40 px-3 py-1 rounded-full mb-4">
+                      🚗 Official Theory Course
                     </span>
                     <h4 className="text-2xl font-black text-white mb-2">{pkg.hours}</h4>
-                    <div className="text-4xl font-black text-red-500 mb-4">R400</div>
-                    <p className="text-slate-300 text-sm leading-relaxed max-w-md mb-8 border-b border-slate-850 pb-6">
-                      {pkg.desc}
-                    </p>
+                    <div className="text-4xl font-black text-red-500 mb-6">R400</div>
+                    
+                    <div className="text-slate-300 text-xs md:text-sm leading-relaxed max-w-md space-y-3 mb-8 border-t border-slate-800/80 pt-6">
+                      {pkg.desc.split('\n').map((line, lIdx) => (
+                        <p key={lIdx} className="font-medium tracking-wide">{line}</p>
+                      ))}
+                    </div>
+
                     <a 
                       href={generateWhatsAppLink('learners', pkg.hours, pkg.price, idx)}
                       target="_blank"
@@ -417,15 +424,16 @@ export default function App() {
               </div>
             )}
 
+            {/* UPDATED SPEC 2: Center aligned text items inside bottom horizontal display grid */}
             <div className="mt-12 bg-slate-900/40 border border-slate-800/60 p-6 rounded-xl">
-              <div className="text-xs font-bold uppercase text-slate-400 mb-4 tracking-wider text-center lg:text-left">
+              <div className="text-xs font-bold uppercase text-slate-400 mb-6 tracking-wider text-center">
                 {activeTab === 'learners' ? "What you'll get:" : "Package Inclusions & Rates:"}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center lg:text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center text-center">
                 {pricing[activeTab].extras.map((extra, idx) => (
-                  <div key={idx} className="flex flex-col lg:flex-row items-center lg:items-start gap-3 bg-slate-950/40 border border-slate-900/80 p-4 rounded-lg flex-1 h-full justify-center lg:justify-start">
-                    <CheckCircle2 className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-slate-300 text-xs font-semibold leading-relaxed tracking-wide">
+                  <div key={idx} className="flex flex-col items-center justify-center gap-3 bg-slate-950/40 border border-slate-900/80 p-4 rounded-lg flex-1 h-full text-center">
+                    <CheckCircle2 className="w-4 h-4 text-red-500 flex-shrink-0" />
+                    <span className="text-slate-300 text-xs font-semibold leading-relaxed tracking-wide max-w-[200px]">
                       {extra}
                     </span>
                   </div>
@@ -507,10 +515,9 @@ export default function App() {
       <footer className="bg-slate-950 border-t border-slate-900 py-16 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-start">
           <div>
-            {/* UPDATED: Integrated Official Brand Identity Mark into Footer Grid Column */}
             <div className="flex flex-col gap-3 mb-4">
               <img 
-                src={`${import.meta.env.BASE_URL}images/logo.png`} 
+                src={logoImg} 
                 alt="Mardons Driving Academy Footer Logo" 
                 className="h-12 w-auto object-contain bg-slate-900/30 p-1 rounded self-start"
                 onError={(e) => {
