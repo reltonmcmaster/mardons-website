@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagram, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 
-// NOTE: Assets inside the public folder do not need JS imports. 
-// We use direct absolute paths which Vite resolves beautifully for static builds.
 const logoImg = 'images/logo.png';
 const fleetAboutImg = 'images/fleet-about.jpg';
 const fleetHeroImg = 'images/fleet-hero.jpg';
@@ -28,6 +26,7 @@ export default function App() {
     mapUrl: 'https://maps.app.goo.gl/1yNYdVqKiyupLEok8',
     facebook: 'https://www.facebook.com/mardonsdrivingacademy',
     instagram: 'https://www.instagram.com/mardonsdrivingacademygq/',
+    googleSearch: 'https://www.google.com/search?q=mardons+driving+academy',
     globalWhatsappMsg: 'https://wa.me/27760295823?text=hi%20mardons%20driving%20academy'
   };
 
@@ -173,48 +172,74 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-red-600 selection:text-white">
-      {/* Top Value Banner */}
-      <div className="bg-red-700 text-white text-xs md:text-sm font-semibold py-2 px-4 text-center tracking-wide">
-        PREMIUM K53 INSTRUCTION IN GQEBERHA • BRAND NEW VW POLO FLEET • HIGH PASS RATE
-      </div>
-
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center w-full">
-          <div className="flex items-center gap-3">
-            <img 
-              src={logoImg} 
-              alt="Mardons Driving Academy Logo" 
-              className="h-14 md:h-18 w-auto object-contain p-1 rounded"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                document.getElementById('nav-logo-text').style.display = 'block';
-              }}
-            />
-            <div id="nav-logo-text" className="text-xl font-black tracking-tighter text-white hidden">
-              MARDONS<span className="text-red-500">.</span>
+      
+      {/* 2-TIER PREMIUM NAVIGATION SYSTEM (Inspired by your uploaded layout) */}
+      <header className="sticky top-0 z-50 w-full shadow-2xl">
+        {/* Tier 1: Actionable Utility Details Strip */}
+        <div className="bg-red-700 text-white text-xs font-semibold py-2.5 px-6 border-b border-red-800 hidden sm:block">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-6">
+              <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                <Phone className="w-3.5 h-3.5 fill-current" />
+                <span>Call Hotline: {contactInfo.phone}</span>
+              </a>
+              <span className="text-red-400">|</span>
+              <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                <Mail className="w-3.5 h-3.5" />
+                <span>{contactInfo.email}</span>
+              </a>
+            </div>
+            <div className="tracking-wide uppercase text-[10px] font-black">
+              Premium K53 Instruction In Gqeberha
             </div>
           </div>
-          
-          <div className="flex items-center gap-5">
-            <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors" title="Facebook">
-              <Facebook className="w-5 h-5" />
-            </a>
-            <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-pink-500 transition-colors" title="Instagram">
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-green-500 transition-colors" title="WhatsApp Chat">
-              <WhatsAppIcon className="w-5 h-5" />
-            </a>
-            <a href={`tel:${contactInfo.phone}`} className="bg-red-600 hover:bg-red-700 text-white p-2.5 rounded-full transition-all shadow-lg shadow-red-900/20 flex items-center justify-center" title="Call Hotline">
-              <Phone className="w-4 h-4 fill-current" />
-            </a>
-          </div>
         </div>
-      </nav>
+
+        {/* Tier 2: Branding Deck Header */}
+        <nav className="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-3.5">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            
+            {/* Left Brand Area */}
+            <div className="flex items-center gap-3">
+              <img 
+                src={logoImg} 
+                alt="Mardons Driving Academy Logo" 
+                className="h-12 md:h-14 w-auto object-contain rounded"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  document.getElementById('nav-logo-text').style.display = 'block';
+                }}
+              />
+              <div id="nav-logo-text" className="text-lg font-black tracking-tighter text-white hidden">
+                MARDONS<span className="text-red-500">.</span>
+              </div>
+            </div>
+            
+            {/* Mid Sequential Index Anchors */}
+            <div className="hidden md:flex items-center gap-8 text-xs uppercase tracking-wider font-bold text-slate-300">
+              <a href="#features" className="hover:text-red-500 transition-colors">Core Features</a>
+              <a href="#packages" className="hover:text-red-500 transition-colors">Rates & Packages</a>
+              <a href="#testimonials" className="hover:text-red-500 transition-colors">Testimonials</a>
+            </div>
+
+            {/* Right Action Anchor */}
+            <div>
+              <a 
+                href={contactInfo.globalWhatsappMsg} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded transition-all shadow-md flex items-center gap-2"
+              >
+                <WhatsAppIcon className="w-4 h-4" />
+                <span>Book Now</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
 
       {/* Hero Section */}
-      <header className="relative bg-slate-950 py-28 px-6 border-b border-slate-900 overflow-hidden min-h-[60vh] flex items-center justify-center">
+      <section className="relative bg-slate-950 py-28 px-6 border-b border-slate-900 overflow-hidden min-h-[60vh] flex items-center justify-center">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center" 
           style={{ backgroundImage: `url(${bannerImg})` }} 
@@ -242,7 +267,7 @@ export default function App() {
             </a>
           </div>
         </div>
-      </header>
+      </section>
 
       {/* Core Highlights Component */}
       <section id="features" className="max-w-7xl mx-auto py-20 px-6 grid md:grid-cols-3 gap-8">
@@ -520,94 +545,132 @@ export default function App() {
         </div>
       </section>
 
-      {/* Footer Details */}
-      <footer className="bg-slate-950 border-t border-slate-900 pt-16 pb-8 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-stretch">
+      {/* NEW INTEGRATION: LAYOUT VARIANT 4 DESIGN FOOTER */}
+      <footer className="bg-slate-900/20 border-t border-slate-900 pt-16 pb-12 px-6 text-center">
+        <div className="max-w-4xl mx-auto space-y-8">
           
-          {/* Column 1: Brand & Updated Copy */}
-          <div className="flex flex-col justify-start">
-            <div className="mb-6">
-              <img 
-                src={logoImg} 
-                alt="Mardons Driving Academy Footer Logo" 
-                className="h-16 md:h-20 w-auto object-contain rounded"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  document.getElementById('footer-brand-fallback').style.display = 'block';
-                }}
-              />
-              <div id="footer-brand-fallback" className="text-xl font-black tracking-tighter text-white hidden">
-                MARDONS Driving Academy
-              </div>
-            </div>
-            
-            <h4 className="text-sm font-bold text-red-500 tracking-wide mb-2">
+          {/* Logo Mark Rendering inside Footer Block */}
+          <div className="flex justify-center items-center">
+            <img 
+              src={logoImg} 
+              alt="Mardons Footer Logo" 
+              className="h-16 w-auto object-contain rounded"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          </div>
+
+          <div className="text-2xl font-black text-white tracking-tight uppercase">
+            MARDONS Driving Academy
+          </div>
+          
+          <p className="text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+            <span className="text-red-500 font-bold block mb-2 text-xs uppercase tracking-widest">
               Guiding Gqeberha with Confidence
-            </h4>
-            <p className="text-slate-300 text-xs font-semibold mb-3 leading-relaxed">
-              Modern, safe vehicles. Patient, trusted instruction.
-            </p>
-            <p className="text-slate-400 text-xs leading-loose max-w-sm">
-              At Mardons, every lesson builds skill, safety, and lifelong confidence.
-            </p>
+            </span>
+            Modern, safe vehicles. Patient, trusted instruction. At Mardons, every lesson builds skill, safety, and lifelong confidence.
+          </p>
+
+          {/* Inline Uniform Contact Vectors */}
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-xs font-semibold text-slate-400 pt-2">
+            <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-2 hover:text-white transition-colors">
+              <Phone className="w-4 h-4 text-red-500 fill-current" /> 
+              <span>{contactInfo.phone}</span>
+            </a>
+            <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-2 hover:text-white transition-colors">
+              <Mail className="w-4 h-4 text-red-500" /> 
+              <span>{contactInfo.email}</span>
+            </a>
+            <a href={contactInfo.mapUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+              <MapPin className="w-4 h-4 text-red-500" /> 
+              <span>Algoa Park, Gqeberha</span>
+            </a>
           </div>
 
-          {/* Column 2: Direct Channels */}
-          <div className="flex flex-col justify-start md:pt-4">
-            <h4 className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-5">Direct Channels</h4>
-            <div className="space-y-4 text-xs text-slate-300">
-              <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-3 hover:text-white transition-colors py-0.5">
-                <Phone className="w-4 h-4 text-red-500 flex-shrink-0" />
-                <span className="font-medium tracking-wide">{contactInfo.phone}</span>
-              </a>
-              <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-3 hover:text-white transition-colors py-0.5">
-                <Mail className="w-4 h-4 text-red-500 flex-shrink-0" />
-                <span className="break-all font-medium tracking-wide">{contactInfo.email}</span>
-              </a>
-              <a href={contactInfo.mapUrl} target="_blank" rel="noreferrer" className="flex items-start gap-3 hover:text-white transition-colors group py-0.5">
-                <MapPin className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5 group-hover:text-red-400" />
-                <span className="no-underline group-hover:text-red-400 transition-colors leading-relaxed font-medium tracking-wide">
-                  {contactInfo.address}
-                </span>
-              </a>
-            </div>
+          {/* Social Anchors Baseline Deck */}
+          <div className="flex justify-center gap-6 pt-4 border-t border-slate-900/60 max-w-xs mx-auto">
+            <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors" title="Facebook">
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-pink-500 transition-colors" title="Instagram">
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-green-500 transition-colors" title="WhatsApp">
+              <WhatsAppIcon className="w-5 h-5" />
+            </a>
           </div>
 
-          {/* Column 3: Booking Hotline Box */}
-          <div className="flex flex-col justify-center">
-            <div className="bg-slate-900 border border-slate-800 p-8 rounded-xl flex flex-col justify-between h-full shadow-inner">
-              <div>
-                <h4 className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-3">Booking Hotline</h4>
-                <p className="text-slate-400 text-xs mb-6 leading-relaxed">
-                  Have specific scoping questions regarding testing slots or vehicle availability? Give our team a call directly.
-                </p>
-              </div>
-              <a href={`tel:${contactInfo.phone}`} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-md">
-                <Phone className="w-3.5 h-3.5 fill-current" />
-                <span className="tracking-widest">Initiate Call</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Bar: Cleaned up icons location context alignment */}
-        <div className="max-w-6xl mx-auto text-center text-slate-600 text-xs mt-16 pt-8 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div>
+          <div className="text-slate-600 text-[11px] pt-8 border-t border-slate-900">
             Copyright © {new Date().getFullYear()} Mardons Driving Academy. All Rights Reserved.
-          </div>
-          <div className="flex gap-5 items-center bg-slate-950 px-4 py-1.5 rounded-full border border-slate-900">
-            <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-blue-500 transition-colors p-1" title="Facebook">
-              <Facebook className="w-4 h-4" />
-            </a>
-            <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-pink-500 transition-colors p-1" title="Instagram">
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-green-500 transition-colors p-1" title="WhatsApp">
-              <WhatsAppIcon className="w-4 h-4" />
-            </a>
           </div>
         </div>
       </footer>
+
+      {/* STOLEN AND ADAPTED FLOATING MATRIX CALL ACTION MODULE
+        Matches your exact design style layout color spectrums.
+      */}
+      <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-center gap-3">
+        {/* Secondary Communication Layers Stack */}
+        <div className="flex flex-col gap-2.5 items-center transition-all duration-300">
+          
+          {/* Custom Google Intent Anchor Link */}
+          <a 
+            href={contactInfo.googleSearch}
+            target="_blank" 
+            rel="noreferrer"
+            className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center shadow-xl border border-slate-800/80 hover:border-slate-700/80 transition-all hover:-translate-y-0.5 group"
+            title="Search Mardons on Google"
+          >
+            <Search className="w-4 h-4 text-slate-400 group-hover:text-amber-500 transition-colors" />
+          </a>
+
+          {/* Instagram Layer */}
+          <a 
+            href={contactInfo.instagram}
+            target="_blank" 
+            rel="noreferrer"
+            className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center shadow-xl border border-slate-800/80 hover:border-slate-700/80 transition-all hover:-translate-y-0.5 group"
+            title="Follow our Instagram Feed"
+          >
+            <Instagram className="w-4 h-4 text-slate-400 group-hover:text-pink-500 transition-colors" />
+          </a>
+
+          {/* Facebook Layer */}
+          <a 
+            href={contactInfo.facebook}
+            target="_blank" 
+            rel="noreferrer"
+            className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center shadow-xl border border-slate-800/80 hover:border-slate-700/80 transition-all hover:-translate-y-0.5 group"
+            title="Connect via Facebook"
+          >
+            <Facebook className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+          </a>
+
+          {/* WhatsApp Layer */}
+          <a 
+            href={contactInfo.globalWhatsappMsg}
+            target="_blank" 
+            rel="noreferrer"
+            className="w-10 h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center shadow-xl border border-slate-800/80 hover:border-slate-700/80 transition-all hover:-translate-y-0.5 group"
+            title="Chat on WhatsApp"
+          >
+            <WhatsAppIcon className="w-4 h-4 text-slate-400 group-hover:text-green-500 transition-colors" />
+          </a>
+        </div>
+
+        {/* Master Pulse Calling Anchor Trigger Element */}
+        <a 
+          href={`tel:${contactInfo.phone}`}
+          className="relative w-14 h-14 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group"
+          title="Call Hotline Instantly"
+        >
+          {/* Pulsing Outer Concentric Aura Effect rings */}
+          <span className="absolute inset-0 rounded-full bg-red-600/40 animate-ping opacity-75 pointer-events-none" />
+          <span className="absolute -inset-1 rounded-full bg-red-600/20 animate-pulse pointer-events-none" />
+          
+          <Phone className="w-6 h-6 fill-current text-white relative z-10 transition-transform duration-300 group-hover:rotate-12" />
+        </a>
+      </div>
+
     </div>
   );
 }
