@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
-import { Phone, Mail, MapPin, CheckCircle2, Award, Shield, Users, ArrowRight, Star, Car, Facebook, Instagram } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Car, Facebook, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
+
+// Custom Simple SVG WhatsApp Icon component since lucide-react doesn't export brand shapes directly
+const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path fillRule="evenodd" d="M12.004 2c-5.525 0-10 4.477-10 10 0 1.954.563 3.776 1.533 5.312L2 22l4.83-1.482A9.948 9.948 0 0012.004 22c5.523 0 10-4.477 10-10s-4.477-10-10-10zm4.587 13.565c-.29.412-1.42 1.05-1.91 1.107-.442.052-.907.07-2.612-.633a10.015 10.015 0 01-4.47-3.923c-.502-.67-.803-1.455-.803-2.278 0-1.745 1.09-2.392 1.482-2.736.332-.293.498-.344.664-.344l.442.012c.166.006.388-.063.608.465.233.56.797 1.95.864 2.088.067.137.11.3.022.48-.088.177-.132.29-.265.445l-.398.471c-.133.153-.272.32-.117.587.155.266.69 1.134 1.48 1.838.79.704 1.458.922 1.724 1.056.265.133.42.112.575-.067.155-.178.663-.772.84-1.04.177-.266.354-.222.597-.133.243.088 1.548.73 1.814.864.265.133.442.2.508.312.067.112.067.653-.223 1.065z" clipRule="evenodd" />
+  </svg>
+);
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('code8');
-  
-  // FIXED: Object state to track individual checkboxes for each package card uniquely
   const [selectedHireOptions, setSelectedHireOptions] = useState({});
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const autoPlayRef = useRef(null);
 
   const contactInfo = {
     phone: '076 029 5823',
@@ -14,7 +21,8 @@ export default function App() {
     address: '1 Exmouth Street, Algoa Park, Gqeberha, 6001',
     mapUrl: 'https://maps.app.goo.gl/1yNYdVqKiyupLEok8',
     facebook: 'https://www.facebook.com/mardonsdrivingacademy',
-    instagram: 'https://www.instagram.com/mardonsdrivingacademygq/'
+    instagram: 'https://www.instagram.com/mardonsdrivingacademygq/',
+    globalWhatsappMsg: 'https://wa.me/27760295823?text=hi%20mardons%20driving%20academy'
   };
 
   const pricing = {
@@ -24,13 +32,13 @@ export default function App() {
       hirePrice: 650,
       hireLabel: 'Add Car Hire for Test Day (+R650)',
       packages: [
-        { hours: '10 Hours', price: 3200, desc: 'Ideal for drivers with basic familiarity looking to polish K53 procedures.' },
-        { hours: '16 Hours', price: 5200, desc: 'Recommended for beginners to master K53 parking and road logic.' },
-        { hours: '20 Hours', price: 6200, desc: 'Complete zero-to-hero track for absolute beginners who have never sat behind a wheel.' }
+        { hours: '10 Hours', label: 'Quick Refresher', price: 3200, desc: 'For drivers who already know the basics and just need to polish up their K53 skills before the test.' },
+        { hours: '16 Hours', label: 'Confident Beginner', price: 5200, desc: 'For new learners who want enough time to master parking, road rules, and build solid confidence.' },
+        { hours: '20 Hours', label: 'Zero‑to‑Hero', price: 6200, desc: 'For absolute beginners starting from scratch — full guidance from first ignition to test‑ready driver.' }
       ],
       extras: [
-        'FREE Learner\'s Materials & Theory Class included',
-        'Door-to-door pickup & drop-off service',
+        'Learner\'s Materials & Theory Classes',
+        'Door-to-Door pickup & drop-off',
         'Certified commercial instructors',
         'Additional hours: R350 p/h'
       ]
@@ -41,13 +49,13 @@ export default function App() {
       hirePrice: 700,
       hireLabel: 'Add Truck Hire for Test Day (+R700)',
       packages: [
-        { hours: '10 Hours', price: 3700, desc: 'For those with basic truck handling looking to nail the test yard.' },
-        { hours: '16 Hours', price: 6000, desc: 'Comprehensive yard and road training covering all K53 truck modules.' },
-        { hours: '20 Hours', price: 7000, desc: 'Full premium mastery track designed for absolute beginners entering the logistics space.' }
+        { hours: '10 Hours', label: 'Quick Refresher', price: 3700, desc: 'For drivers who already know the basics and just need to polish up their K53 skills before the test.' },
+        { hours: '16 Hours', label: 'Confident Beginner', price: 6000, desc: 'For new learners who want enough time to master parking, road rules, and build solid confidence.' },
+        { hours: '20 Hours', label: 'Zero‑to‑Hero', price: 7000, desc: 'For absolute beginners starting from scratch — full guidance from first ignition to test‑ready driver.' }
       ],
       extras: [
-        'FREE Learner\'s Materials & Theory Class included',
-        'Door-to-door pickup & drop-off service',
+        'Learner\'s Materials & Theory Classes',
+        'Door-to-Door pickup & drop-off',
         'Certified commercial instructors',
         'Additional hours: R400 p/h'
       ]
@@ -70,43 +78,6 @@ export default function App() {
         'Door-to-door service included for your convenience'
       ]
     }
-  };
-
-  const handleTabChange = (tabName) => {
-    setActiveTab(tabName);
-  };
-
-  // Handle distinct item selection states safely based on tab and card index
-  const handleHireCheckboxChange = (tab, index, isChecked) => {
-    setSelectedHireOptions(prev => ({
-      ...prev,
-      [`${tab}-${index}`]: isChecked
-    }));
-  };
-
-  const generateWhatsAppLink = (category, hours, basePrice, cardIndex) => {
-    let message = "";
-    const activeCategory = pricing[category];
-    const isHireSelected = !!selectedHireOptions[`${category}-${cardIndex}`];
-    
-    const totalPrice = isHireSelected && category !== 'learners' ? basePrice + activeCategory.hirePrice : basePrice;
-    const formattedTotal = `R${totalPrice.toLocaleString('en-ZA')}`;
-    const formattedBase = `R${basePrice.toLocaleString('en-ZA')}`;
-
-    if (category === 'learners') {
-      message = `Hi Mardons Driving Academy, I would like to book the Learner’s License Package (2 Sessions for R400). Please let me know available slots.`;
-    } else {
-      const formattedCategory = category === 'code8' ? 'Code 8 Manual' : 'Code 10 Manual';
-      const vehicleType = category === 'code8' ? 'car hire' : 'truck hire';
-      
-      if (isHireSelected) {
-        message = `Hi Mardons Driving Academy, I want to book the ${formattedCategory} package for ${hours} and include the test day ${vehicleType}. Total comes to ${formattedTotal} (${formattedBase} + R${activeCategory.hirePrice} hire). Please let me know how we can get started.`;
-      } else {
-        message = `Hi Mardons Driving Academy, I am interested in booking the ${formattedCategory} package for ${hours} (${formattedBase}). Please let me know how we can get started.`;
-      }
-    }
-
-    return `https://wa.me/${contactInfo.whatsappNum}?text=${encodeURIComponent(message)}`;
   };
 
   const testimonials = [
@@ -136,6 +107,61 @@ export default function App() {
     { name: 'Lucretia Roman', text: 'The most patient crew in the area. Best booking decision I ever made for my career path.' }
   ];
 
+  // Group into frames of 6 cards for carousel calculations
+  const totalSlides = Math.ceil(testimonials.length / 6);
+
+  const startAutoPlay = () => {
+    stopAutoPlay();
+    autoPlayRef.current = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % totalSlides);
+    }, 6000); // Cycles smoothly every 6 seconds
+  };
+
+  const stopAutoPlay = () => {
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+  };
+
+  useEffect(() => {
+    startAutoPlay();
+    return () => stopAutoPlay();
+  }, [totalSlides]);
+
+  const handleTabChange = (tabName) => {
+    setActiveTab(tabName);
+  };
+
+  const handleHireCheckboxChange = (tab, index, isChecked) => {
+    setSelectedHireOptions(prev => ({
+      ...prev,
+      [`${tab}-${index}`]: isChecked
+    }));
+  };
+
+  const generateWhatsAppLink = (category, hours, basePrice, cardIndex) => {
+    let message = "";
+    const activeCategory = pricing[category];
+    const isHireSelected = !!selectedHireOptions[`${category}-${cardIndex}`];
+    
+    const totalPrice = isHireSelected && category !== 'learners' ? basePrice + activeCategory.hirePrice : basePrice;
+    const formattedTotal = `R${totalPrice.toLocaleString('en-ZA')}`;
+    const formattedBase = `R${basePrice.toLocaleString('en-ZA')}`;
+
+    if (category === 'learners') {
+      message = `Hi Driving Academy, I would like to book the Learner’s License Package (2 Sessions for R400). Please let me know available slots.`;
+    } else {
+      const formattedCategory = category === 'code8' ? 'Code 8 Manual' : 'Code 10 Manual';
+      const vehicleType = category === 'code8' ? 'car hire' : 'truck hire';
+      
+      if (isHireSelected) {
+        message = `Hi Mardons Driving Academy, I want to book the ${formattedCategory} package for ${hours} and include the test day ${vehicleType}. Total comes to ${formattedTotal} (${formattedBase} + R${activeCategory.hirePrice} hire). Please let me know how we can get started.`;
+      } else {
+        message = `Hi Mardons Driving Academy, I am interested in booking the ${formattedCategory} package for ${hours} (${formattedBase}). Please let me know how we can get started.`;
+      }
+    }
+
+    return `https://wa.me/${contactInfo.whatsappNum}?text=${encodeURIComponent(message)}`;
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-red-600 selection:text-white">
       {/* Top Value Banner */}
@@ -153,12 +179,16 @@ export default function App() {
             <span className="text-xs uppercase tracking-widest text-slate-400 border-l border-slate-700 pl-3 hidden sm:inline">Driving Academy</span>
           </div>
           
+          {/* UPDATED ACTION HUB: Standardized With Live WhatsApp Navigation Endpoint */}
           <div className="flex items-center gap-5">
             <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors" title="Facebook">
               <Facebook className="w-5 h-5" />
             </a>
             <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-pink-500 transition-colors" title="Instagram">
               <Instagram className="w-5 h-5" />
+            </a>
+            <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-green-500 transition-colors" title="WhatsApp Chat">
+              <WhatsAppIcon className="w-5 h-5" />
             </a>
             <a href={`tel:${contactInfo.phone}`} className="bg-red-600 hover:bg-red-700 text-white p-2.5 rounded-full transition-all shadow-lg shadow-red-900/20 flex items-center justify-center" title="Call Hotline">
               <Phone className="w-4 h-4 fill-current" />
@@ -192,7 +222,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Core Highlights Component - UPDATED SHAPES */}
+      {/* Core Highlights Component */}
       <section id="features" className="max-w-7xl mx-auto py-20 px-6 grid md:grid-cols-3 gap-8">
         <div className="bg-slate-900/40 border border-slate-800/80 p-8 rounded-xl backdrop-blur-sm">
           <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
@@ -223,7 +253,6 @@ export default function App() {
       {/* Interactive Pricing Section */}
       <section id="packages" className="bg-slate-900/20 border-y border-slate-900/60 py-24 px-6 relative">
         <div className="max-w-7xl mx-auto">
-          {/* UPDATED HEADER AREA WITH CUSTOM BUDGET COPY */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white mb-4">Cost Effective Packages To Suit Your Budget</h2>
             <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
@@ -258,39 +287,70 @@ export default function App() {
               </span>
             </div>
 
-            {/* Pricing Output Matrix */}
-            <div className={`grid gap-6 items-start ${activeTab === 'learners' ? 'max-w-2xl mx-auto grid-cols-1' : 'md:grid-cols-3'}`}>
-              {pricing[activeTab].packages.map((pkg, idx) => {
-                // FIXED: Each card reads from its own independent unique state location object map
-                const isThisCardSelected = !!selectedHireOptions[`${activeTab}-${idx}`];
-                const hasAddon = isThisCardSelected && !pkg.isLearners;
-                const finalPrice = hasAddon ? pkg.price + pricing[activeTab].hirePrice : pkg.price;
+            {/* Pricing Matrix Architecture */}
+            {activeTab === 'learners' ? (
+              /* UPDATED SPEC 3: Cleanly Center Aligned Content Frame With Scaled Fitting Proportions */
+              <div className="max-w-xl mx-auto">
+                {pricing.learners.packages.map((pkg, idx) => (
+                  <div key={idx} className="bg-slate-900 border-2 border-red-900/40 p-8 rounded-2xl flex flex-col items-center text-center shadow-2xl">
+                    <span className="text-[11px] uppercase tracking-widest font-black text-red-500 bg-red-950/60 border border-red-900/40 px-3 py-1 rounded-full mb-3">
+                      🚗 Professional Theory Course
+                    </span>
+                    <h4 className="text-2xl font-black text-white mb-2">{pkg.hours}</h4>
+                    <div className="text-4xl font-black text-red-500 mb-4">R400</div>
+                    <p className="text-slate-300 text-sm leading-relaxed max-w-md mb-8 border-b border-slate-850 pb-6">
+                      {pkg.desc}
+                    </p>
+                    <a 
+                      href={generateWhatsAppLink('learners', pkg.hours, pkg.price, idx)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full max-w-sm bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-md transition-colors shadow-lg shadow-red-900/20"
+                    >
+                      Secure Learners License Package
+                    </a>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid gap-6 items-start md:grid-cols-3">
+                {pricing[activeTab].packages.map((pkg, idx) => {
+                  const isThisCardSelected = !!selectedHireOptions[`${activeTab}-${idx}`];
+                  const hasAddon = isThisCardSelected;
+                  const finalPrice = hasAddon ? pkg.price + pricing[activeTab].hirePrice : pkg.price;
 
-                return (
-                  <div key={idx} className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 p-6 rounded-xl transition-all relative flex flex-col justify-between min-h-[350px]">
-                    <div>
-                      <div className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-2">Duration</div>
-                      <h4 className="text-xl font-bold text-white mb-4">{pkg.hours}</h4>
-                      
-                      <div className="mb-4">
-                        <div className="text-3xl font-black text-red-500">
-                          R{finalPrice.toLocaleString('en-ZA')}
-                        </div>
-                        {hasAddon && (
-                          <div className="text-xs text-slate-400 font-medium mt-1">
-                            (R{pkg.price.toLocaleString('en-ZA')} package + R{pricing[activeTab].hirePrice} hire)
+                  return (
+                    <div key={idx} className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 p-6 rounded-xl transition-all relative flex flex-col justify-between min-h-[380px]">
+                      <div>
+                        {/* UPDATED SPEC 7: Custom Identity Tags nested beautifully on each module card */}
+                        <div className="flex justify-between items-start mb-3">
+                          <div>
+                            <div className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-1">Duration</div>
+                            <h4 className="text-xl font-bold text-white">{pkg.hours}</h4>
                           </div>
-                        )}
-                      </div>
+                          <span className="text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded bg-slate-950 border border-slate-800 text-red-400 shadow-inner">
+                            {pkg.label}
+                          </span>
+                        </div>
+                        
+                        <div className="mb-4">
+                          <div className="text-3xl font-black text-red-500">
+                            R{finalPrice.toLocaleString('en-ZA')}
+                          </div>
+                          {hasAddon && (
+                            <div className="text-xs text-slate-400 font-medium mt-1">
+                              (R{pkg.price.toLocaleString('en-ZA')} package + R{pricing[activeTab].hirePrice} hire)
+                            </div>
+                          )}
+                        </div>
 
-                      <p className="text-slate-400 text-xs leading-relaxed mb-6 border-t border-slate-800/60 pt-4">
-                        {pkg.desc}
-                      </p>
-                    </div>
-                    
-                    {/* Integrated Internal Booking Button-Checkbox Block */}
-                    <div className="space-y-4 pt-2">
-                      {!pkg.isLearners && (
+                        <p className="text-slate-400 text-xs leading-relaxed mb-6 border-t border-slate-800/60 pt-4">
+                          {pkg.desc}
+                        </p>
+                      </div>
+                      
+                      {/* Integrated Internal Checkbox Interface */}
+                      <div className="space-y-4 pt-2">
                         <label className="flex items-center gap-2.5 bg-slate-950/60 border border-slate-800/80 hover:border-slate-700/60 px-3 py-2 rounded-md cursor-pointer select-none transition-colors w-full">
                           <input 
                             type="checkbox" 
@@ -302,23 +362,23 @@ export default function App() {
                             {pricing[activeTab].hireLabel}
                           </span>
                         </label>
-                      )}
-                      
-                      <a 
-                        href={generateWhatsAppLink(activeTab, pkg.hours, pkg.price, idx)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="w-full text-center block bg-slate-800 hover:bg-green-600 hover:text-white text-slate-200 text-xs font-bold uppercase tracking-wider py-3 rounded transition-colors shadow-sm"
-                      >
-                        {pkg.isLearners ? "Secure Learners License Package" : "Secure Training Slot"}
-                      </a>
+                        
+                        <a 
+                          href={generateWhatsAppLink(activeTab, pkg.hours, pkg.price, idx)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="w-full text-center block bg-slate-800 hover:bg-green-600 hover:text-white text-slate-200 text-xs font-bold uppercase tracking-wider py-3 rounded transition-colors shadow-sm"
+                        >
+                          Secure Training Slot
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
 
-            {/* Inclusions Row Layout Display */}
+            {/* Inclusions Matrix Horizontal Display Grid */}
             <div className="mt-12 bg-slate-900/40 border border-slate-800/60 p-6 rounded-xl">
               <div className="text-xs font-bold uppercase text-slate-400 mb-4 tracking-wider text-center lg:text-left">
                 {activeTab === 'learners' ? "What you'll get:" : "Package Inclusions & Rates:"}
@@ -338,29 +398,73 @@ export default function App() {
         </div>
       </section>
 
-      {/* Customer Feedback - 24 REVIEW BLOCK METRIC */}
-      <section id="testimonials" className="max-w-6xl mx-auto py-24 px-6">
-        <div className="text-center mb-16">
+      {/* UPDATED SPEC 2: Premium 24-Card Sliding Testimonial Carousel Architecture */}
+      <section id="testimonials" className="max-w-7xl mx-auto py-24 px-6 relative group/carousel">
+        <div className="text-center mb-12">
           <h2 className="text-3xl font-black tracking-tight text-white mb-3">Endorsed By Drivers in The Bay</h2>
-          <p className="text-slate-400 text-sm max-w-md mx-auto">
-            Real feedback from graduates who successfully passed their licensing tests under our instruction.
+          <p className="text-slate-400 text-sm max-w-xl mx-auto leading-relaxed">
+            Real stories from learners who trained with us and proudly earned their licenses.
           </p>
         </div>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {testimonials.map((t, idx) => (
-            <div key={idx} className="bg-slate-900/30 border border-slate-800/40 p-6 rounded-xl flex flex-col justify-between hover:border-slate-700/60 transition-all">
-              <div>
-                <div className="flex gap-1 text-amber-500 mb-4">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}
-                </div>
-                <p className="text-slate-300 text-xs italic leading-relaxed mb-6">
-                  "{t.text}"
-                </p>
+
+        {/* Carousel Viewing Deck Container */}
+        <div 
+          className="overflow-hidden relative px-2"
+          onMouseEnter={stopAutoPlay}
+          onMouseLeave={startAutoPlay}
+        >
+          <div 
+            className="flex transition-transform duration-700 ease-in-out"
+            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          >
+            {/* Split total cards perfectly across calculation groups */}
+            {[...Array(totalSlides)].map((_, slideIdx) => (
+              <div key={slideIdx} className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {testimonials.slice(slideIdx * 6, (slideIdx * 6) + 6).map((t, idx) => (
+                  <div key={idx} className="bg-slate-900/40 border border-slate-800/60 p-6 rounded-xl flex flex-col justify-between shadow-md transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/60">
+                    <div>
+                      <div className="flex gap-1 text-amber-500 mb-3">
+                        {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
+                      </div>
+                      <p className="text-slate-300 text-xs italic leading-relaxed mb-4">
+                        "{t.text}"
+                      </p>
+                    </div>
+                    <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider border-t border-slate-800/40 pt-3 block">
+                      — {t.name}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <span className="text-[11px] font-bold text-red-500 uppercase tracking-wider border-t border-slate-800/60 pt-4 block">
-                — {t.name}
-              </span>
-            </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Manual Controller Navigation Handles */}
+        <button 
+          onClick={() => setCurrentSlide(prev => (prev === 0 ? totalSlides - 1 : prev - 1))}
+          className="absolute left-0 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-red-600 border border-slate-800 p-2.5 rounded-full text-slate-300 hover:text-white transition-all shadow-xl opacity-80 group-hover/carousel:opacity-100 hidden md:block"
+          title="Previous Slide"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={() => setCurrentSlide(prev => (prev + 1) % totalSlides)}
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-red-600 border border-slate-800 p-2.5 rounded-full text-slate-300 hover:text-white transition-all shadow-xl opacity-80 group-hover/carousel:opacity-100 hidden md:block"
+          title="Next Slide"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+
+        {/* Navigation Indicator Jump Dots */}
+        <div className="flex justify-center gap-2 mt-8">
+          {[...Array(totalSlides)].map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-6 bg-red-600' : 'w-2 bg-slate-800 hover:bg-slate-700'}`}
+              aria-label={`Go to slide page ${idx + 1}`}
+            />
           ))}
         </div>
       </section>
@@ -369,18 +473,28 @@ export default function App() {
       <footer className="bg-slate-950 border-t border-slate-900 py-16 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-start">
           <div>
-            <div className="text-xl font-black tracking-tighter text-white mb-4">
-              MARDONS<span className="text-red-500">.</span>
+            {/* UPDATED SPEC 4: Custom Strategic Brand Paragraph Statements */}
+            <div className="text-xl font-black tracking-tighter text-white mb-2">
+              MARDONS Driving Academy
             </div>
-            <p className="text-slate-400 text-xs leading-relaxed max-w-xs mb-6">
-              Vetted, high-end K53 educational design operating throughout Gqeberha. Built on execution, modern fleets, and complete safety profiles.
+            <div className="text-xs text-red-500 font-bold uppercase tracking-wider mb-4">
+              Guiding Gqeberha with care and confidence
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed max-w-sm mb-6 space-y-2">
+              We provide modern, safe vehicles and a teaching style built on patience and trust. 
+              Our mission is simple: to help every learner feel secure, supported, and ready for the road. 
+              With Mardons, you’re not just learning to drive — you’re building confidence for life.
             </p>
+            {/* Amplified Brand Footers */}
             <div className="flex gap-6 items-center">
               <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors p-1" title="Facebook">
                 <Facebook className="w-6 h-6" />
               </a>
               <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-pink-500 transition-colors p-1" title="Instagram">
                 <Instagram className="w-6 h-6" />
+              </a>
+              <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-green-500 transition-colors p-1" title="WhatsApp">
+                <WhatsAppIcon className="w-6 h-6" />
               </a>
             </div>
           </div>
@@ -396,9 +510,10 @@ export default function App() {
                 <Mail className="w-4 h-4 text-red-500 flex-shrink-0" />
                 <span className="break-all">{contactInfo.email}</span>
               </a>
+              {/* UPDATED SPEC 6: Address anchor tracking without global lines */}
               <a href={contactInfo.mapUrl} target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:text-white transition-colors group">
                 <MapPin className="w-4 h-4 text-red-500 flex-shrink-0 group-hover:text-red-400" />
-                <span className="underline decoration-slate-700 underline-offset-4 group-hover:decoration-white transition-colors">
+                <span className="no-underline group-hover:text-red-400 transition-colors">
                   {contactInfo.address}
                 </span>
               </a>
