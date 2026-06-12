@@ -5,6 +5,7 @@ import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagra
 import logoImg from '/images/logo.png';
 import fleetAboutImg from '/images/fleet-about.jpg';
 import fleetHeroImg from '/images/fleet-hero.jpg';
+import bannerImg from '/images/banner.png'; // Added your new banner asset
 
 const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -71,7 +72,11 @@ export default function App() {
         { 
           hours: 'Study Pack + 2 Guided Sessions', 
           price: 400, 
-          desc: 'Includes official study material tailored to the K53 learner’s test\n2 one‑hour sessions of one‑on‑one professional theory instruction\nDesigned to give you confidence and clarity before exam day',
+          desc: [
+            'Includes official study material tailored to the K53 learner’s test',
+            '2 one‑hour sessions of one‑on‑one professional theory instruction',
+            'Designed to give you confidence and clarity before exam day'
+          ],
           isLearners: true
         }
       ],
@@ -173,13 +178,14 @@ export default function App() {
       </div>
 
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-3">
+      <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center w-full">
           <div className="flex items-center gap-3">
+            {/* UPDATED SPEC 2: Logo image size increased significantly */}
             <img 
               src={logoImg} 
               alt="Mardons Driving Academy Logo" 
-              className="h-10 w-auto object-contain bg-slate-900/50 p-1 rounded"
+              className="h-14 md:h-18 w-auto object-contain p-1 rounded"
               onError={(e) => {
                 e.target.style.display = 'none';
                 document.getElementById('nav-logo-text').style.display = 'block';
@@ -208,26 +214,31 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <header className="relative bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 py-24 px-6 border-b border-slate-900 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-10 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${fleetHeroImg})` }} />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(185,28,28,0.08),transparent_50%)] z-0" />
+      {/* UPDATED SPEC 3: Clean, balanced, clear layout utilizing banner.png with balanced transparency tint */}
+      <header className="relative bg-slate-950 py-28 px-6 border-b border-slate-900 overflow-hidden min-h-[60vh] flex items-center justify-center">
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center" 
+          style={{ backgroundImage: `url(${bannerImg})` }} 
+        />
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px] z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(185,28,28,0.15),transparent_50%)] z-10" />
         
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <span className="text-xs uppercase tracking-widest font-bold text-red-500 bg-red-950/50 border border-red-900/50 px-3 py-1 rounded-full">
+        <div className="max-w-5xl mx-auto text-center relative z-20">
+          <span className="text-xs uppercase tracking-widest font-bold text-red-400 bg-red-950/60 border border-red-900/50 px-3 py-1 rounded-full">
             The Gold Standard in Gqeberha
           </span>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white mt-6 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white mt-6 mb-6 leading-tight drop-shadow-sm">
             Preparing You Fully For <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-amber-500">The Road Ahead.</span>
           </h1>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-base md:text-lg text-slate-200 max-w-2xl mx-auto mb-10 leading-relaxed font-medium drop-shadow">
             Professional, certified K53 driver training tailored for lasting confidence. We combine modern vehicles, highly disciplined training frameworks, and patient tuition to secure your licence smoothly.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="#packages" className="bg-slate-100 hover:bg-white text-slate-950 px-6 py-3 rounded-md font-bold transition-all flex items-center gap-2 shadow-lg text-sm">
               View Rates & Packages <ArrowRight className="w-4 h-4 text-red-600" />
             </a>
-            <a href={`tel:${contactInfo.phone}`} className="bg-slate-900 hover:bg-slate-800 text-white border border-slate-700 px-6 py-3 rounded-md font-semibold transition-all text-sm flex items-center gap-2">
+            <a href={`tel:${contactInfo.phone}`} className="bg-slate-900/90 hover:bg-slate-800 text-white border border-slate-700 px-6 py-3 rounded-md font-semibold transition-all text-sm flex items-center gap-2 backdrop-blur-sm">
               <Phone className="w-4 h-4 text-red-500" /> Talk to an Instructor
             </a>
           </div>
@@ -333,7 +344,7 @@ export default function App() {
 
             {/* Pricing Matrix Architecture */}
             {activeTab === 'learners' ? (
-              /* UPDATED SPEC 1: New layout context with explicit spacing rules inside shape container */
+              /* UPDATED SPEC 1: Package card updated with your explicit text format changes */
               <div className="max-w-xl mx-auto">
                 {pricing.learners.packages.map((pkg, idx) => (
                   <div key={idx} className="bg-slate-900 border-2 border-red-900/40 p-8 rounded-2xl flex flex-col items-center text-center shadow-2xl">
@@ -343,8 +354,8 @@ export default function App() {
                     <h4 className="text-2xl font-black text-white mb-2">{pkg.hours}</h4>
                     <div className="text-4xl font-black text-red-500 mb-6">R400</div>
                     
-                    <div className="text-slate-300 text-xs md:text-sm leading-relaxed max-w-md space-y-3 mb-8 border-t border-slate-800/80 pt-6">
-                      {pkg.desc.split('\n').map((line, lIdx) => (
+                    <div className="text-slate-300 text-xs md:text-sm leading-relaxed max-w-md space-y-3 mb-8 border-t border-slate-800/80 pt-6 text-center">
+                      {pkg.desc.map((line, lIdx) => (
                         <p key={lIdx} className="font-medium tracking-wide">{line}</p>
                       ))}
                     </div>
@@ -424,7 +435,7 @@ export default function App() {
               </div>
             )}
 
-            {/* UPDATED SPEC 2: Center aligned text items inside bottom horizontal display grid */}
+            {/* UPDATED SPEC 2: Center aligned lists block */}
             <div className="mt-12 bg-slate-900/40 border border-slate-800/60 p-6 rounded-xl">
               <div className="text-xs font-bold uppercase text-slate-400 mb-6 tracking-wider text-center">
                 {activeTab === 'learners' ? "What you'll get:" : "Package Inclusions & Rates:"}
@@ -433,7 +444,7 @@ export default function App() {
                 {pricing[activeTab].extras.map((extra, idx) => (
                   <div key={idx} className="flex flex-col items-center justify-center gap-3 bg-slate-950/40 border border-slate-900/80 p-4 rounded-lg flex-1 h-full text-center">
                     <CheckCircle2 className="w-4 h-4 text-red-500 flex-shrink-0" />
-                    <span className="text-slate-300 text-xs font-semibold leading-relaxed tracking-wide max-w-[200px]">
+                    <span className="text-slate-300 text-xs font-semibold leading-relaxed tracking-wide max-w-[220px]">
                       {extra}
                     </span>
                   </div>
@@ -516,10 +527,11 @@ export default function App() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-start">
           <div>
             <div className="flex flex-col gap-3 mb-4">
+              {/* UPDATED SPEC 2: Footer logo scaled up cleanly */}
               <img 
                 src={logoImg} 
                 alt="Mardons Driving Academy Footer Logo" 
-                className="h-12 w-auto object-contain bg-slate-900/30 p-1 rounded self-start"
+                className="h-16 md:h-20 w-auto object-contain p-1 rounded self-start"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   document.getElementById('footer-brand-fallback').style.display = 'block';
