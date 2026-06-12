@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Phone, Mail, MapPin, CheckCircle2, ArrowRight, Star, Facebook, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Import assets directly so Vite tracks and packages them perfectly for GitHub Pages
-import logoImg from '/images/logo.png';
-import fleetAboutImg from '/images/fleet-about.jpg';
-import fleetHeroImg from '/images/fleet-hero.jpg';
-import bannerImg from '/images/banner.png'; // Added your new banner asset
+// Relative assets paths to ensure compatibility with GitHub Pages routing configurations
+import logoImg from './images/logo.png';
+import fleetAboutImg from './images/fleet-about.jpg';
+import fleetHeroImg from './images/fleet-hero.jpg';
+import bannerImg from './images/banner.png';
 
 const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -181,7 +181,6 @@ export default function App() {
       <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center w-full">
           <div className="flex items-center gap-3">
-            {/* UPDATED SPEC 2: Logo image size increased significantly */}
             <img 
               src={logoImg} 
               alt="Mardons Driving Academy Logo" 
@@ -214,7 +213,6 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      {/* UPDATED SPEC 3: Clean, balanced, clear layout utilizing banner.png with balanced transparency tint */}
       <header className="relative bg-slate-950 py-28 px-6 border-b border-slate-900 overflow-hidden min-h-[60vh] flex items-center justify-center">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center" 
@@ -344,7 +342,6 @@ export default function App() {
 
             {/* Pricing Matrix Architecture */}
             {activeTab === 'learners' ? (
-              /* UPDATED SPEC 1: Package card updated with your explicit text format changes */
               <div className="max-w-xl mx-auto">
                 {pricing.learners.packages.map((pkg, idx) => (
                   <div key={idx} className="bg-slate-900 border-2 border-red-900/40 p-8 rounded-2xl flex flex-col items-center text-center shadow-2xl">
@@ -435,7 +432,7 @@ export default function App() {
               </div>
             )}
 
-            {/* UPDATED SPEC 2: Center aligned lists block */}
+            {/* Center aligned lists block */}
             <div className="mt-12 bg-slate-900/40 border border-slate-800/60 p-6 rounded-xl">
               <div className="text-xs font-bold uppercase text-slate-400 mb-6 tracking-wider text-center">
                 {activeTab === 'learners' ? "What you'll get:" : "Package Inclusions & Rates:"}
@@ -523,15 +520,17 @@ export default function App() {
       </section>
 
       {/* Footer Details */}
-      <footer className="bg-slate-950 border-t border-slate-900 py-16 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-start">
-          <div>
-            <div className="flex flex-col gap-3 mb-4">
-              {/* UPDATED SPEC 2: Footer logo scaled up cleanly */}
+      {/* Refined for premium feel layout, contrast hierarchy, spacing alignment, and centered button modules */}
+      <footer className="bg-slate-950 border-t border-slate-900 pt-16 pb-8 px-6">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 items-stretch">
+          
+          {/* Column 1: Brand & Updated Copy */}
+          <div className="flex flex-col justify-start">
+            <div className="mb-6">
               <img 
                 src={logoImg} 
                 alt="Mardons Driving Academy Footer Logo" 
-                className="h-16 md:h-20 w-auto object-contain p-1 rounded self-start"
+                className="h-16 md:h-20 w-auto object-contain rounded"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   document.getElementById('footer-brand-fallback').style.display = 'block';
@@ -540,60 +539,76 @@ export default function App() {
               <div id="footer-brand-fallback" className="text-xl font-black tracking-tighter text-white hidden">
                 MARDONS Driving Academy
               </div>
-              <div className="text-xs text-red-500 font-bold uppercase tracking-wider">
-                Guiding Gqeberha with care and confidence
-              </div>
             </div>
-            <p className="text-slate-400 text-xs leading-relaxed max-w-sm mb-6">
-              We provide modern, safe vehicles and a teaching style built on patience and trust. 
-              Our mission is simple: to help every learner feel secure, supported, and ready for the road. 
-              With Mardons, you’re not just learning to drive — you’re building confidence for life.
+            
+            {/* Premium Typography Hierarchy: Sentence case, clean weight, balanced line heights */}
+            <h4 className="text-sm font-bold text-red-500 tracking-wide mb-2">
+              Guiding Gqeberha with Confidence
+            </h4>
+            <p className="text-slate-300 text-xs font-semibold mb-3 leading-relaxed">
+              Modern, safe vehicles. Patient, trusted instruction.
             </p>
-            <div className="flex gap-6 items-center">
-              <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors p-1" title="Facebook">
-                <Facebook className="w-6 h-6" />
-              </a>
-              <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-pink-500 transition-colors p-1" title="Instagram">
-                <Instagram className="w-6 h-6" />
-              </a>
-              <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-green-500 transition-colors p-1" title="WhatsApp">
-                <WhatsAppIcon className="w-6 h-6" />
-              </a>
-            </div>
+            <p className="text-slate-400 text-xs leading-loose max-w-sm">
+              At Mardons, every lesson builds skill, safety, and lifelong confidence.
+            </p>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-xs uppercase tracking-widest text-slate-400 font-bold">Direct Channels</h4>
-            <div className="space-y-3 text-xs text-slate-300">
-              <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-3 hover:text-white transition-colors">
+          {/* Column 2: Direct Channels */}
+          <div className="flex flex-col justify-start md:pt-4">
+            <h4 className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-5">Direct Channels</h4>
+            <div className="space-y-4 text-xs text-slate-300">
+              <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-3 hover:text-white transition-colors py-0.5">
                 <Phone className="w-4 h-4 text-red-500 flex-shrink-0" />
-                <span>{contactInfo.phone}</span>
+                <span className="font-medium tracking-wide">{contactInfo.phone}</span>
               </a>
-              <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-3 hover:text-white transition-colors">
+              <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-3 hover:text-white transition-colors py-0.5">
                 <Mail className="w-4 h-4 text-red-500 flex-shrink-0" />
-                <span className="break-all">{contactInfo.email}</span>
+                <span className="break-all font-medium tracking-wide">{contactInfo.email}</span>
               </a>
-              <a href={contactInfo.mapUrl} target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:text-white transition-colors group">
-                <MapPin className="w-4 h-4 text-red-500 flex-shrink-0 group-hover:text-red-400" />
-                <span className="no-underline group-hover:text-red-400 transition-colors">
+              <a href={contactInfo.mapUrl} target="_blank" rel="noreferrer" className="flex items-start gap-3 hover:text-white transition-colors group py-0.5">
+                <MapPin className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5 group-hover:text-red-400" />
+                <span className="no-underline group-hover:text-red-400 transition-colors leading-relaxed font-medium tracking-wide">
                   {contactInfo.address}
                 </span>
               </a>
             </div>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl">
-            <h4 className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-3">Booking Hotline</h4>
-            <p className="text-slate-400 text-xs mb-4 leading-relaxed">
-              Have specific scoping questions regarding testing slots or vehicle availability? Give our team a call directly.
-            </p>
-            <a href={`tel:${contactInfo.phone}`} className="w-full text-center block bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider py-2.5 rounded transition-colors flex items-center justify-center gap-2">
-              <Phone className="w-3.5 h-3.5 fill-current" /> Initiate Call
-            </a>
+          {/* Column 3: Booking Hotline Box (Enhanced Padding & Matching Corners) */}
+          <div className="flex flex-col justify-center">
+            <div className="bg-slate-900 border border-slate-800 p-8 rounded-xl flex flex-col justify-between h-full shadow-inner">
+              <div>
+                <h4 className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-3">Booking Hotline</h4>
+                <p className="text-slate-400 text-xs mb-6 leading-relaxed">
+                  Have specific scoping questions regarding testing slots or vehicle availability? Give our team a call directly.
+                </p>
+              </div>
+              {/* Centered Button Layout Refinement with Balanced Corner Radii */}
+              <a href={`tel:${contactInfo.phone}`} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-md">
+                <Phone className="w-3.5 h-3.5 fill-current" />
+                <span className="tracking-widest">Initiate Call</span>
+              </a>
+            </div>
           </div>
         </div>
-        <div className="max-w-6xl mx-auto text-center text-slate-600 text-xs mt-12 pt-6 border-t border-slate-900">
-          Copyright © {new Date().getFullYear()} Mardons Driving Academy. All Rights Reserved.
+
+        {/* Bottom Bar: Cleaned up icons location context alignment */}
+        <div className="max-w-6xl mx-auto text-center text-slate-600 text-xs mt-16 pt-8 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div>
+            Copyright © {new Date().getFullYear()} Mardons Driving Academy. All Rights Reserved.
+          </div>
+          {/* Relocated Social Icons to sit neatly alongside the copyright bar layout context */}
+          <div className="flex gap-5 items-center bg-slate-950 px-4 py-1.5 rounded-full border border-slate-900">
+            <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-blue-500 transition-colors p-1" title="Facebook">
+              <Facebook className="w-4 h-4" />
+            </a>
+            <a href={contactInfo.instagram} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-pink-500 transition-colors p-1" title="Instagram">
+              <Instagram className="w-4 h-4" />
+            </a>
+            <a href={contactInfo.globalWhatsappMsg} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-green-500 transition-colors p-1" title="WhatsApp">
+              <WhatsAppIcon className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </footer>
     </div>
